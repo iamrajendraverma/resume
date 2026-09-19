@@ -5,260 +5,300 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rajendra Verma - AI/ML Solutions Architect</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ---- Theme tokens ------------------------------------------------ */
+        :root {
+            --navy:    #14365c;  /* primary  - headings, names, rules      */
+            --teal:    #0f766e;  /* accent   - companies, tech, markers    */
+            --ink:     #24303d;  /* body copy                              */
+            --muted:   #6b7480;  /* dates, secondary text                  */
+            --rule:    #d9e0e8;  /* hairlines                              */
+            --wash:    #f3f7f7;  /* chip background                        */
+            --wash-br: #d8e6e4;  /* chip border                            */
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Calibri', 'Segoe UI', 'Arial', sans-serif;
-            line-height: 1.3;
-            color: #333;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
+            font-family: 'Segoe UI', 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 9px;
+            line-height: 1.38;
+            color: var(--ink);
+            background-color: #e9edf1;
+            padding: 24px 20px;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
             max-width: 8.5in;
-            height: auto;
-            background-color: white;
+            background-color: #fff;
             margin: 0 auto;
-            padding: 0.5in;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            padding: 0.5in 0.55in;
+            box-shadow: 0 1px 3px rgba(20,54,92,.10), 0 8px 28px rgba(20,54,92,.10);
+            border-top: 3px solid var(--navy);
         }
 
-        /* Header */
+        /* ---- Header ------------------------------------------------------ */
         .header {
-            border-bottom: 3px solid #1e3a8a;
-            padding-bottom: 8px;
-            margin-bottom: 10px;
+            padding-bottom: 9px;
+            margin-bottom: 13px;
+            border-bottom: 1px solid var(--rule);
         }
 
         .name {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1e3a8a;
-            margin: 0;
-            padding: 0;
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 2.2px;
+            line-height: 1.1;
         }
 
         .title {
-            font-size: 12px;
-            color: #0f766e;
+            font-size: 10.5px;
+            color: var(--teal);
             font-weight: 600;
-            margin: 2px 0;
+            letter-spacing: 1.1px;
+            text-transform: uppercase;
+            margin-top: 4px;
         }
 
         .contact-info {
-            font-size: 9px;
-            color: #555;
-            margin-top: 3px;
+            font-size: 8.5px;
+            color: var(--muted);
+            margin-top: 7px;
+            letter-spacing: .2px;
         }
 
-        .contact-info a {
-            color: #1e3a8a;
-            text-decoration: none;
-        }
+        .contact-info a { color: var(--navy); text-decoration: none; }
 
-        /* Sections */
-        .section {
-            margin-bottom: 8px;
-        }
+        .contact-info .sep { color: var(--rule); margin: 0 6px; }
+
+        /* ---- Sections ---------------------------------------------------- */
+        .section { margin-bottom: 11px; }
 
         .section-title {
-            font-size: 10px;
-            font-weight: bold;
-            color: white;
-            background-color: #1e3a8a;
-            padding: 4px 8px;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 1.4px;
             text-transform: uppercase;
+            padding-bottom: 3px;
+            margin-bottom: 7px;
+            border-bottom: 1.5px solid var(--navy);
         }
 
-        /* Summary */
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 8px;
+            background: var(--teal);
+            margin-right: 6px;
+            vertical-align: -1px;
+        }
+
+        /* ---- Summary ----------------------------------------------------- */
         .summary {
-            font-size: 9px;
-            line-height: 1.35;
-            color: #444;
-            margin-bottom: 4px;
+            line-height: 1.5;
+            color: var(--ink);
             text-align: justify;
         }
 
-        /* Skills */
+        .summary strong { color: var(--navy); }
+
+        /* ---- Skill / expertise rows -------------------------------------- */
         .skill-row {
             display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 8px;
-            margin-bottom: 3px;
-            font-size: 9px;
+            grid-template-columns: 112px 1fr;
+            gap: 10px;
+            padding: 2.5px 0;
+            border-bottom: 1px dotted var(--rule);
         }
+
+        .skill-row:last-child { border-bottom: none; }
 
         .skill-label {
-            font-weight: bold;
-            color: #1e3a8a;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: .2px;
         }
 
-        .skill-value {
-            color: #555;
-        }
+        .skill-value { color: var(--ink); }
 
-        /* Experience */
-        .job {
-            margin-bottom: 6px;
-        }
+        /* ---- Experience -------------------------------------------------- */
+        .job { margin-bottom: 8px; }
+        .job:last-child { margin-bottom: 0; }
 
         .job-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 1px;
+            gap: 12px;
         }
 
         .job-title {
             font-size: 10px;
-            font-weight: bold;
-            color: #1e3a8a;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: .2px;
         }
 
         .job-date {
-            font-size: 9px;
-            color: #666;
-            font-style: italic;
+            font-size: 8.5px;
+            color: var(--muted);
+            white-space: nowrap;
+            letter-spacing: .3px;
         }
 
         .job-company {
             font-size: 9px;
-            color: #0f766e;
+            color: var(--teal);
             font-weight: 600;
-            margin-bottom: 2px;
+            margin: 1px 0 3px;
         }
 
-        .bullets {
-            font-size: 9px;
-            color: #555;
-            margin-left: 15px;
-            line-height: 1.3;
-            list-style-type: disc;
+        /* ---- Shared bullet styling --------------------------------------- */
+        .bullets,
+        .project-bullets,
+        .achievement-list {
+            color: var(--ink);
+            margin-left: 13px;
+            padding-left: 0;
+            list-style: disc outside;
         }
 
-        .bullets li {
-            margin-bottom: 1px;
+        .bullets li,
+        .project-bullets li,
+        .achievement-list li {
+            margin-bottom: 1.5px;
+            padding-left: 2px;
         }
 
-        /* Projects */
-        .project {
-            margin-bottom: 6px;
+        .bullets li::marker,
+        .project-bullets li::marker,
+        .achievement-list li::marker {
+            color: var(--teal);
+            font-size: 8px;
         }
+
+        .bullets strong,
+        .project-bullets strong,
+        .achievement-list strong { color: var(--navy); }
+
+        /* ---- Projects ---------------------------------------------------- */
+        .project { margin-bottom: 8px; }
+        .project:last-child { margin-bottom: 0; }
 
         .project-title {
-            font-size: 10px;
-            font-weight: bold;
-            color: #1e3a8a;
-            margin-bottom: 1px;
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: .2px;
         }
 
         .project-desc {
-            font-size: 8px;
-            color: #666;
+            font-size: 8.5px;
+            color: var(--muted);
             font-style: italic;
-            margin-bottom: 1px;
+            margin: 1px 0 2px;
         }
 
-        .project-bullets {
-            font-size: 9px;
-            color: #555;
-            margin-left: 15px;
-            margin-bottom: 2px;
-            line-height: 1.3;
-            list-style-type: disc;
-        }
-
-        .project-bullets li {
-            margin-bottom: 1px;
+        .badge {
+            display: inline-block;
+            background: var(--navy);
+            color: #fff;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+            padding: 1.5px 6px;
+            border-radius: 9px;
+            margin-left: 5px;
+            vertical-align: 1px;
         }
 
         .tech-stack {
+            display: inline-block;
             font-size: 8px;
-            color: #0f766e;
-            font-weight: bold;
-            margin-left: 15px;
-            margin-top: 1px;
+            color: var(--teal);
+            font-weight: 600;
+            background: var(--wash);
+            border: 1px solid var(--wash-br);
+            border-radius: 3px;
+            padding: 2px 7px;
+            margin: 3px 0 0 13px;
+            letter-spacing: .2px;
         }
 
-        /* Education */
-        .edu-item {
-            font-size: 9px;
-            margin-bottom: 2px;
-            line-height: 1.3;
-        }
+        .tech-stack a { color: var(--teal); text-decoration: none; }
 
-        .edu-degree {
-            font-weight: bold;
-            color: #1e3a8a;
-        }
-
-        /* Certifications */
+        /* ---- Education / Certifications ---------------------------------- */
+        .edu-item,
         .cert-item {
-            font-size: 9px;
-            margin-bottom: 2px;
+            padding: 2.5px 0;
+            border-bottom: 1px dotted var(--rule);
         }
 
-        /* Achievements */
-        .achievement-group {
-            margin-bottom: 4px;
+        .edu-item:last-child,
+        .cert-item:last-child { border-bottom: none; }
+
+        .edu-degree,
+        .cert-item strong {
+            font-weight: 700;
+            color: var(--navy);
         }
+
+        /* ---- Achievements ------------------------------------------------ */
+        .achievement-group { margin-bottom: 6px; }
+        .achievement-group:last-child { margin-bottom: 0; }
 
         .achievement-title {
-            font-weight: bold;
-            color: #1e3a8a;
-            font-size: 9px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: .3px;
             margin-bottom: 2px;
         }
 
-        .achievement-list {
-            font-size: 9px;
-            color: #555;
-            margin-left: 15px;
-            line-height: 1.3;
-            list-style-type: disc;
+        .footer-note {
+            font-size: 8px;
+            color: #9aa3ad;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 7px;
+            border-top: 1px solid var(--rule);
         }
 
-        .achievement-list li {
-            margin-bottom: 1px;
+        /* ---- Print ------------------------------------------------------- */
+        @page {
+            size: Letter;
+            margin: 0.45in;
         }
 
-        /* Print styles */
         @media print {
-            html {
+            html, body {
+                background: #fff;
                 margin: 0;
                 padding: 0;
-            }
-
-            body {
-                background-color: white;
-                margin: 0;
-                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
 
             .container {
                 max-width: 100%;
                 margin: 0;
-                padding: 0.5in;
+                padding: 0;
                 box-shadow: none;
-                page-break-after: avoid;
+                border-top: none;
             }
 
-            .section {
-                page-break-inside: avoid;
-            }
+            .section       { page-break-inside: avoid; }
+            .job,
+            .project,
+            .achievement-group { page-break-inside: avoid; }
+            .section-title { page-break-after: avoid; }
 
-            a {
-                color: #1e3a8a;
-                text-decoration: none;
-            }
+            a { color: var(--navy); text-decoration: none; }
         }
     </style>
 </head>
@@ -267,12 +307,12 @@
         <!-- Header -->
         <div class="header">
             <h1 class="name">RAJENDRA VERMA</h1>
-            <div class="title">AI/ML Solutions Architect | Sr. Technology Consultant</div>
+            <div class="title">AI/ML Solutions Architect &nbsp;|&nbsp; Sr. Technology Consultant</div>
             <div class="contact-info">
-                📧 <a href="mailto:rajendrarajaramv@gmail.com">rajendrarajaramv@gmail.com</a> |
-                📱 +91 7000-201-0326 |
-                🔗 <a href="https://linkedin.com/in/rajendrarajaramv">LinkedIn</a> |
-                💻 <a href="https://iamrajendraverma.github.io">GitHub</a>
+                <a href="mailto:rajendrarajaramv@gmail.com">rajendrarajaramv@gmail.com</a>
+                <span class="sep">|</span> +91 7000-201-0326
+                <span class="sep">|</span> <a href="https://linkedin.com/in/rajendrarajaramv">linkedin.com/in/rajendrarajaramv</a>
+                <span class="sep">|</span> <a href="https://iamrajendraverma.github.io">iamrajendraverma.github.io</a>
             </div>
         </div>
 
@@ -288,27 +328,27 @@
         <div class="section">
             <div class="section-title">Core Technical Skills</div>
             <div class="skill-row">
-                <div class="skill-label">Languages:</div>
+                <div class="skill-label">Languages</div>
                 <div class="skill-value">Kotlin, Java, Python, Dart (Flutter), C++</div>
             </div>
             <div class="skill-row">
-                <div class="skill-label">Mobile:</div>
+                <div class="skill-label">Mobile</div>
                 <div class="skill-value">Jetpack Compose, KMP, Android SDK, Flutter</div>
             </div>
             <div class="skill-row">
-                <div class="skill-label">AI & LLMs:</div>
+                <div class="skill-label">AI &amp; LLMs</div>
                 <div class="skill-value">Claude AI, OpenAI, RAG, Prompt Engineering, LangChain</div>
             </div>
             <div class="skill-row">
-                <div class="skill-label">Cloud:</div>
+                <div class="skill-label">Cloud</div>
                 <div class="skill-value">AWS, GCP, Firebase, Lambda, AppEngine</div>
             </div>
             <div class="skill-row">
-                <div class="skill-label">Backend:</div>
+                <div class="skill-label">Backend</div>
                 <div class="skill-value">FastAPI, Flask, REST APIs, Ktor, WebRTC</div>
             </div>
             <div class="skill-row">
-                <div class="skill-label">Databases:</div>
+                <div class="skill-label">Databases</div>
                 <div class="skill-value">SQLite, Room, Realm, Vector DBs, Pinecone, Weaviate</div>
             </div>
         </div>
@@ -317,15 +357,15 @@
         <div class="section">
             <div class="section-title">AI/ML Expertise</div>
             <div class="skill-row">
-                <div class="skill-label">Generative AI:</div>
+                <div class="skill-label">Generative AI</div>
                 <div class="skill-value">Claude AI, OpenAI GPT, LLaMA, Fine-tuning</div>
             </div>
             <div class="skill-row">
-                <div class="skill-label">Architecture:</div>
+                <div class="skill-label">Architecture</div>
                 <div class="skill-value">RAG, Agentic Workflows, LLM Chaining, Multi-model Orchestration</div>
             </div>
             <div class="skill-row">
-                <div class="skill-label">Solution Design:</div>
+                <div class="skill-label">Solution Design</div>
                 <div class="skill-value">LLM Evaluation, Cost Analysis, Implementation Roadmaps</div>
             </div>
         </div>
@@ -336,7 +376,7 @@
 
             <div class="job">
                 <div class="job-header">
-                    <span class="job-title">Sr. Technology Consultant & AI/ML Solutions Architect</span>
+                    <span class="job-title">Sr. Technology Consultant &amp; AI/ML Solutions Architect</span>
                     <span class="job-date">Apr 2025 – Present</span>
                 </div>
                 <div class="job-company">Techment, Indore, India</div>
@@ -397,7 +437,7 @@
                     <li>Spearheaded migration from legacy Android to Jetpack Compose with successful delivery</li>
                     <li>Architected Kotlin Multiplatform (KMP) transition for unified iOS/Android codebase</li>
                 </ul>
-                <div class="tech-stack">Tech: Jetpack Compose, KMP, Material 3, REST APIs</div>
+                <div class="tech-stack">Jetpack Compose &middot; KMP &middot; Material 3 &middot; REST APIs</div>
             </div>
 
             <div class="project">
@@ -405,10 +445,10 @@
                 <div class="project-desc">Intelligent meeting transcription and note generation system</div>
                 <ul class="project-bullets">
                     <li>Built full-stack Android app using Jetpack Compose with Python/FastAPI backend</li>
-                    <li>Integrated LLM processing (OpenAI & Gemini APIs) for automated meeting analysis</li>
+                    <li>Integrated LLM processing (OpenAI &amp; Gemini APIs) for automated meeting analysis</li>
                     <li>Leveraged Claude AI for code architecture and optimization decisions</li>
                 </ul>
-                <div class="tech-stack">Tech: Jetpack Compose, Ktor, Python/FastAPI, LLMs</div>
+                <div class="tech-stack">Jetpack Compose &middot; Ktor &middot; Python/FastAPI &middot; LLMs</div>
             </div>
 
             <div class="project">
@@ -418,19 +458,19 @@
                     <li>Developed BLE 6.0 (5.4) integration for secure medical device communication</li>
                     <li>Architected multi-flavor app supporting different healthcare client domains</li>
                 </ul>
-                <div class="tech-stack">Tech: Kotlin, Jetpack Compose, BLE, Firebase</div>
+                <div class="tech-stack">Kotlin &middot; Jetpack Compose &middot; BLE &middot; Firebase</div>
             </div>
 
             <div class="project">
-                <div class="project-title">Techment Hackathon CodeCompass 🥈 2nd Prize Winner</div>
+                <div class="project-title">Techment Hackathon CodeCompass<span class="badge">2nd Prize Winner</span></div>
                 <div class="project-desc">Innovative AI/mobile solution showcased at Techment hackathon competition</div>
                 <ul class="project-bullets">
                     <li>Developed and presented comprehensive solution earning <strong>2nd Prize</strong> among competing teams</li>
                     <li>Demonstrated AI/ML integration capabilities with mobile-first architecture</li>
                     <li>Showcased modern development practices and innovative problem-solving approach</li>
                 </ul>
-                <div class="tech-stack">Tech: Mobile Development, AI Integration, Full-Stack Architecture</div>
-                <div class="tech-stack">Repository: <a href="https://github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass" style="color: #0f766e; text-decoration: underline;">github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass</a></div>
+                <div class="tech-stack">Mobile Development &middot; AI Integration &middot; Full-Stack Architecture</div>
+                <div class="tech-stack"><a href="https://github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass">github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass</a></div>
             </div>
         </div>
 
@@ -458,7 +498,7 @@
         <div class="section">
             <div class="section-title">Key Achievements</div>
             <div class="achievement-group">
-                <div class="achievement-title">AI/ML & Architecture:</div>
+                <div class="achievement-title">AI/ML &amp; Architecture</div>
                 <ul class="achievement-list">
                     <li>Architected LLM-powered meeting transcription system with Claude/OpenAI integration</li>
                     <li>Designed end-to-end AI solution architecture leveraging Claude API for code generation</li>
@@ -466,7 +506,7 @@
                 </ul>
             </div>
             <div class="achievement-group">
-                <div class="achievement-title">Engineering & Delivery:</div>
+                <div class="achievement-title">Engineering &amp; Delivery</div>
                 <ul class="achievement-list">
                     <li>Won <strong>2nd Prize</strong> at Techment Hackathon CodeCompass for innovative AI/mobile solution</li>
                     <li>Migrated legacy Android applications to modern Jetpack Compose architecture</li>
@@ -476,9 +516,7 @@
             </div>
         </div>
 
-        <div style="font-size: 8px; color: #999; margin-top: 6px; text-align: center;">
-            References available upon request
-        </div>
+        <div class="footer-note">References available upon request</div>
     </div>
 </body>
 </html>
