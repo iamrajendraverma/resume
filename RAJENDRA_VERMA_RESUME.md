@@ -111,13 +111,15 @@ Strategic AI/ML Solutions Architect with **10+ years** of full-stack engineering
 
 ### Techment Hackathon CodeCompass | 🥈 2nd Prize Winner
 
-*Innovative AI/mobile solution showcased at Techment hackathon competition*
+*AI tooling solution built on the Model Context Protocol (MCP) client–server architecture*
 
-- Developed and presented comprehensive solution earning **2nd Prize** among competing teams
-- Demonstrated AI/ML integration capabilities with mobile-first architecture
-- Showcased modern development practices and innovative problem-solving approach
+- Designed and built a **host-agnostic MCP server** exposing custom tools and resources over the Model Context Protocol
+- Delivered **cross-host compatibility** from a single tool contract — the same server is consumed by **Claude Desktop, Cursor, and Grok** with no client-specific code
+- Implemented the **MCP client** that discovers server capabilities and orchestrates tool calls through the LLM
+- Architected the client–server contract — tool schemas, capability negotiation, request/response handling, and transport layer
+- Developed and presented the solution to judges, earning **2nd Prize** among competing teams
 - **Repository:** [github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass](https://github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass)
-- **Tech Stack:** Mobile Development, AI Integration, Full-Stack Architecture
+- **Tech Stack:** Model Context Protocol (MCP), MCP Client/Server, Claude Desktop, Cursor, Grok, LLM Tool Use, AI Agent Architecture
 
 ### Meeting Maker | AI-Powered Personal Project
 
@@ -178,7 +180,7 @@ DAVV University, Indore, India | Oct 2008
 ✅ Implemented **RAG pipeline** concepts for intelligent document processing and semantic search in enterprise applications  
 
 **Engineering & Delivery:**
-✅ Won **2nd Prize** at Techment Hackathon CodeCompass for innovative AI/mobile solution  
+✅ Won **2nd Prize** at Techment Hackathon CodeCompass for an **MCP-based AI tooling solution** (Model Context Protocol client/server)  
 ✅ Successfully migrated legacy Android applications to modern Jetpack Compose architecture with AI-enhanced features  
 ✅ Reduced bug reports by **40%** through comprehensive automated testing strategies  
 ✅ Delivered **15+ production applications** across 8+ countries with multi-language and AI feature support  
