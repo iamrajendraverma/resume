@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retrieval Augmented Generation (RAG) — Study Notes</title>
+<style>
+:root{
+  --navy:#14365c; --navy-lt:#26527f; --teal:#0f766e; --teal-lt:#14958a;
+  --ink:#1f2b38; --body:#33414f; --muted:#6b7684;
+  --rule:#e2e8ee; --bg:#f4f6f9; --surface:#ffffff;
+  --wash:#f2f8f7; --wash-br:#cfe4e1;
+  --amber:#8a6100; --amber-bg:#fdf6e6; --amber-br:#ecd9a8;
+  --rose:#8c2f39; --rose-bg:#fdf2f3; --rose-br:#eecdd1;
+  --code-bg:#12212f; --code-fg:#dfe8f0; --code-mut:#7f95aa;
+  --max:790px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --navy:#8fb8e8; --navy-lt:#a9caf0; --teal:#5fcfc2; --teal-lt:#7fdcd0;
+    --ink:#e8eef5; --body:#c2ceda; --muted:#8c9bab;
+    --rule:#2a3947; --bg:#0e1620; --surface:#16202c;
+    --wash:#14282a; --wash-br:#23484a;
+    --amber:#e8c37a; --amber-bg:#2a2314; --amber-br:#4e401f;
+    --rose:#eaa1aa; --rose-bg:#2b1619; --rose-br:#54282e;
+    --code-bg:#0a121b; --code-fg:#dfe8f0; --code-mut:#7f95aa;
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+  background:var(--bg); color:var(--body);
+  font-size:16px; line-height:1.68; -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex; gap:44px; max-width:1180px; margin:0 auto; padding:40px 28px 80px}
+
+/* ---- Sidebar TOC ---- */
+.toc{width:232px; flex:0 0 232px; position:sticky; top:40px; align-self:flex-start; font-size:13.5px}
+.toc h2{
+  font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted); font-weight:700; margin-bottom:12px; padding-left:13px;
+}
+.toc a{
+  display:block; color:var(--muted); text-decoration:none;
+  padding:5px 0 5px 13px; border-left:2px solid var(--rule);
+  transition:color .15s, border-color .15s;
+}
+.toc a:hover{color:var(--navy)}
+.toc a.active{color:var(--navy); border-left-color:var(--teal); font-weight:600}
+
+/* ---- Article ---- */
+.article{flex:1; min-width:0; max-width:var(--max)}
+.card{
+  background:var(--surface); border-radius:10px; padding:52px 56px 60px;
+  box-shadow:0 1px 2px rgba(20,54,92,.06), 0 10px 34px rgba(20,54,92,.07);
+  border-top:3px solid var(--navy);
+}
+@media (prefers-color-scheme:dark){.card{box-shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.3)}}
+
+.eyebrow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px}
+.chip{
+  display:inline-block; background:var(--navy); color:#fff;
+  font-size:10.5px; font-weight:700; letter-spacing:.9px; text-transform:uppercase;
+  padding:3px 10px; border-radius:11px;
+}
+@media (prefers-color-scheme:dark){.chip{background:var(--navy); color:#0e1620}}
+.eyebrow .course{font-size:12.5px; color:var(--muted); letter-spacing:.2px}
+
+h1{
+  font-size:34px; line-height:1.2; color:var(--ink); font-weight:700;
+  letter-spacing:-.4px; margin-bottom:10px;
+}
+.lede{
+  font-size:17.5px; line-height:1.62; color:var(--body);
+  padding-bottom:26px; border-bottom:1px solid var(--rule); margin-bottom:34px;
+}
+
+h2{
+  font-size:22px; color:var(--navy); font-weight:700; letter-spacing:-.2px;
+  margin:46px 0 16px; padding-bottom:8px; border-bottom:1.5px solid var(--rule);
+  scroll-margin-top:28px;
+}
+h2::before{
+  content:''; display:inline-block; width:4px; height:17px; background:var(--teal);
+  margin-right:10px; vertical-align:-2px; border-radius:1px;
+}
+h3{font-size:17px; color:var(--ink); font-weight:700; margin:30px 0 10px; scroll-margin-top:28px}
+h4{
+  font-size:12px; color:var(--teal); font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; margin:24px 0 8px;
+}
+p{margin-bottom:14px}
+strong{color:var(--ink); font-weight:600}
+em{color:var(--body)}
+a{color:var(--navy); text-decoration:underline; text-underline-offset:2px}
+
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:6px; padding-left:4px}
+li::marker{color:var(--teal)}
+ol li::marker{font-weight:700; font-size:14px}
+
+/* ---- Callouts ---- */
+blockquote{
+  background:var(--wash); border-left:3px solid var(--teal);
+  padding:15px 20px; margin:20px 0; border-radius:0 5px 5px 0;
+}
+blockquote p:last-child{margin-bottom:0}
+.note, .correction{
+  padding:15px 20px; margin:22px 0; border-radius:5px; font-size:14.5px;
+  border-left:3px solid;
+}
+.note{background:var(--amber-bg); border-color:var(--amber-br); border-left-color:var(--amber)}
+.correction{background:var(--rose-bg); border-color:var(--rose-br); border-left-color:var(--rose)}
+.note .tag, .correction .tag{
+  display:block; font-size:10.5px; font-weight:700; letter-spacing:1.1px;
+  text-transform:uppercase; margin-bottom:5px;
+}
+.note .tag{color:var(--amber)} .correction .tag{color:var(--rose)}
+.note p:last-child, .correction p:last-child{margin-bottom:0}
+
+/* ---- Tables ---- */
+table{width:100%; border-collapse:collapse; margin:20px 0; font-size:14.5px}
+th{
+  text-align:left; background:var(--wash); color:var(--navy);
+  font-size:11px; font-weight:700; letter-spacing:.9px; text-transform:uppercase;
+  padding:10px 14px; border-bottom:1.5px solid var(--wash-br);
+}
+td{padding:11px 14px; border-bottom:1px solid var(--rule); vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.key{font-weight:600; color:var(--navy); white-space:nowrap; width:1%}
+
+/* ---- Code ---- */
+pre{
+  background:var(--code-bg); color:var(--code-fg); padding:18px 20px;
+  border-radius:7px; overflow-x:auto; margin:18px 0;
+  font-size:13px; line-height:1.6;
+}
+pre code{font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace}
+code{
+  font-family:'SF Mono',Menlo,Consolas,monospace; font-size:.88em;
+  background:var(--wash); color:var(--teal);
+  padding:1.5px 5px; border-radius:3px; border:1px solid var(--wash-br);
+}
+pre code{background:none; color:inherit; padding:0; border:none; font-size:inherit}
+.pre-label{
+  display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted); margin:18px 0 -8px;
+}
+
+/* ---- Pipeline diagram ---- */
+.flow{
+  display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  background:var(--wash); border:1px solid var(--wash-br);
+  padding:18px; border-radius:7px; margin:20px 0;
+}
+.flow .step{
+  background:var(--surface); border:1px solid var(--wash-br); color:var(--navy);
+  font-size:12.5px; font-weight:600; padding:7px 13px; border-radius:5px; white-space:nowrap;
+}
+.flow .arrow{color:var(--teal); font-weight:700}
+.flow .step.final{background:var(--navy); color:#fff; border-color:var(--navy)}
+@media (prefers-color-scheme:dark){.flow .step.final{color:#0e1620}}
+
+/* ---- Vector figure ---- */
+.vec{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:20px 0;
+}
+.vec .item{border:1px solid var(--rule); border-radius:7px; padding:14px 16px; background:var(--surface)}
+.vec .label{font-size:11px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:var(--teal); margin-bottom:6px}
+.vec .val{font-family:'SF Mono',Menlo,Consolas,monospace; font-size:15px; color:var(--navy); font-weight:600}
+.vec .sub{font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.45}
+
+hr{border:none; border-top:1px solid var(--rule); margin:40px 0}
+.footer{margin-top:46px; padding-top:18px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--muted)}
+
+/* ---- Responsive ---- */
+@media (max-width:980px){
+  .layout{flex-direction:column; gap:0; padding:24px 18px 60px}
+  .toc{width:100%; flex:none; position:static; margin-bottom:26px;
+       background:var(--surface); border-radius:8px; padding:18px 20px;
+       box-shadow:0 1px 2px rgba(20,54,92,.06)}
+  .toc a{border-left:none; padding:4px 0}
+  .toc a.active{border-left:none}
+  .card{padding:32px 24px 40px; border-radius:8px}
+  h1{font-size:27px} .lede{font-size:16px}
+}
+
+/* ---- Print ---- */
+@page{size:A4; margin:16mm}
+@media print{
+  body{background:#fff; font-size:10.5pt; line-height:1.5; color:#000}
+  .layout{display:block; padding:0; max-width:100%}
+  .toc{display:none}
+  .card{box-shadow:none; border-top:none; padding:0; border-radius:0}
+  .article{max-width:100%}
+  h2,h3{page-break-after:avoid} pre,table,blockquote,.note,.correction,.flow{page-break-inside:avoid}
+  pre{background:#f4f6f8; color:#12212f; border:1px solid #d5dde5}
+  a{color:#000; text-decoration:none}
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <nav class="toc">
+    <h2>Contents</h2>
+    <a href="#problem">The Problem</a>
+    <a href="#option-1">Option 1 — Everything</a>
+    <a href="#option-2">Option 2 — Chunking</a>
+    <a href="#this-is-rag">This is RAG</a>
+    <a href="#chunking">Chunking Strategies</a>
+    <a href="#embeddings">Text Embeddings</a>
+    <a href="#flow">The Full RAG Flow</a>
+    <a href="#bm25">BM25 Lexical Search</a>
+    <a href="#multi-index">Multi-Index Pipeline</a>
+    <a href="#rerank">Re-ranking Results</a>
+    <a href="#contextual">Contextual Retrieval</a>
+  </nav>
+
+  <main class="article">
+  <div class="card">
+
+    <div class="eyebrow">
+      <span class="chip">19 September 2026</span>
+      <span class="course">Study notes — Claude Certified Architect (Foundations), Anthropic Academy</span>
+    </div>
+
+    <h1>Retrieval Augmented Generation (RAG)</h1>
+
+    <p class="lede"><strong>Retrieval Augmented Generation (RAG)</strong> is a technique that helps you work with large documents when using Claude. Instead of cramming an entire 800-page financial report into a single prompt, RAG lets you intelligently find and include <strong>only the most relevant sections</strong> for each question.</p>
+
+    <!-- ============ PROBLEM ============ -->
+    <h2 id="problem">The Problem with Large Documents</h2>
+    <p>Imagine you have a massive financial document and want to ask Claude specific questions about it, like <em>"What risk factors does this company have?"</em></p>
+    <p>You face a fundamental challenge:</p>
+    <blockquote><p>How do you get the <strong>right information</strong> from the document into Claude so it can answer your question effectively?</p></blockquote>
+
+    <!-- ============ OPTION 1 ============ -->
+    <h2 id="option-1">Option 1 — Include Everything in the Prompt</h2>
+    <p>The first approach seems straightforward: extract all the text from the document and stuff it directly into your prompt along with the user's question.</p>
+    <h4>Problems with this approach</h4>
+    <ul>
+      <li>There's a hard limit on how much text Claude can process — your document might be too long</li>
+      <li>Claude becomes less effective with very long prompts</li>
+      <li>Larger prompts cost more money and take longer to process</li>
+    </ul>
+
+    <div class="note">
+      <span class="tag">Worth noting — 2026</span>
+      <p>Current Claude models have a <strong>1M-token context window</strong>, so the "document is simply too long" constraint binds far less often than it used to — an 800-page report may well fit. The other arguments for RAG still hold: <strong>cost</strong>, <strong>latency</strong>, and <strong>attention</strong> (Claude stays sharper on a focused prompt than a vast one). Treat Option 1 as genuinely viable for a single mid-size document, and reach for RAG when you have collections, tight cost targets, or repeated queries over the same corpus.</p>
+    </div>
+
+    <!-- ============ OPTION 2 ============ -->
+    <h2 id="option-2">Option 2 — Break Documents into Chunks</h2>
+    <p>The second approach is more sophisticated. You break the document into smaller chunks during a <strong>preprocessing step</strong>, then find and include only the chunks relevant to each user question.</p>
+    <h4>How it works</h4>
+    <p>When a user asks <em>"What risks does this company face?"</em>, you search through your chunks to find the one about <strong>"Risk Factors"</strong> and include only that section in your prompt to Claude.</p>
+
+    <h3>Benefits vs Challenges</h3>
+    <table>
+      <thead><tr><th>Benefits</th><th>Challenges</th></tr></thead>
+      <tbody>
+        <tr><td>Claude can focus on only the most relevant content</td><td>Requires a preprocessing step to split documents</td></tr>
+        <tr><td>Scales up to very large documents</td><td>Need a searching mechanism to find "relevant" chunks</td></tr>
+        <tr><td>Works with multiple documents</td><td>Included chunks might not contain all the context Claude needs</td></tr>
+        <tr><td>Smaller prompts cost less and run faster</td><td>Many ways to chunk text — which approach is best?</td></tr>
+      </tbody>
+    </table>
+
+    <blockquote><p><strong>The missing-context problem:</strong> if you only include the "Risk Factors" section, you might miss important context from the "Strategy Outlook" section that addresses <em>how the company plans to handle those risks</em>.</p></blockquote>
+
+    <!-- ============ THIS IS RAG ============ -->
+    <h2 id="this-is-rag">This is RAG</h2>
+    <p>Option 2 <strong>is</strong> Retrieval Augmented Generation. Despite its complexity, RAG offers significant advantages for working with large documents — but it comes with technical challenges that require careful consideration.</p>
+
+    <h3>Key Components</h3>
+    <ol>
+      <li><strong>Document preprocessing and chunking</strong></li>
+      <li><strong>A search mechanism</strong> to find relevant chunks</li>
+      <li><strong>Intelligent selection</strong> of which chunks to include in prompts</li>
+    </ol>
+
+    <div class="flow">
+      <span class="step">Document</span><span class="arrow">→</span>
+      <span class="step">Chunk</span><span class="arrow">→</span>
+      <span class="step">Search</span><span class="arrow">→</span>
+      <span class="step">Select</span><span class="arrow">→</span>
+      <span class="step">Prompt</span><span class="arrow">→</span>
+      <span class="step final">Claude</span>
+    </div>
+
+    <h3>When to Use It</h3>
+    <p>When considering RAG for your application, evaluate whether the benefits outweigh the additional complexity <strong>for your specific use case</strong>.</p>
+    <table>
+      <tbody>
+        <tr><td class="key">Shines when</td><td>Working with large document collections where you need precise, contextual answers</td></tr>
+        <tr><td class="key">Costs you</td><td>More upfront engineering work than simply including entire documents in prompts</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============ CHUNKING ============ -->
+    <h2 id="chunking">Three Main Chunking Strategies</h2>
+
+    <h3>1. Size-Based</h3>
+    <p>Size-based chunking is the most straightforward approach. You simply divide your document into chunks of approximately equal character or word count. It's easy to implement and works reliably across different document types.</p>
+    <p>However, this approach has clear downsides. Words get cut off mid-sentence, and chunks lose important context. For example, a chunk might not include the section header that would explain what the content is actually about.</p>
+    <p>The solution is to add <strong>overlap</strong> between chunks. Each chunk includes some characters from neighbouring chunks, ensuring better context preservation and avoiding abrupt cutoffs.</p>
+
+    <span class="pre-label">Python</span>
+<pre><code>def chunk_by_char(text, chunk_size=150, chunk_overlap=20):
+    chunks = []
+    start_idx = 0
+
+    while start_idx &lt; len(text):
+        end_idx = min(start_idx + chunk_size, len(text))
+        chunk_text = text[start_idx:end_idx]
+        chunks.append(chunk_text)
+
+        start_idx = (
+            end_idx - chunk_overlap if end_idx &lt; len(text) else len(text)
+        )
+
+    return chunks</code></pre>
+
+    <h3>2. Structure-Based</h3>
+    <p>Structure-based chunking leverages the natural organisation of your documents. If you're working with markdown files, you can split on headers. For other formats, you might split on paragraphs or other structural elements.</p>
+    <p>This approach works beautifully when you have guarantees about document structure. For markdown documents, you can split on section headers:</p>
+
+    <span class="pre-label">Python</span>
+<pre><code>import re
+
+def chunk_by_header(text):
+    # Split by # headers in markdown
+    sections = re.split(r'\n#+\s+', text)
+    return sections</code></pre>
+
+    <h3>3. Semantic-Based</h3>
+    <p>Semantic-based chunking is the most sophisticated approach. It analyses the meaning and relationships between sentences to group related content together. This typically involves:</p>
+    <ul>
+      <li>Breaking text into sentences</li>
+      <li>Using NLP techniques to measure semantic similarity</li>
+      <li>Grouping related sentences into coherent chunks</li>
+    </ul>
+    <p>While this can produce the highest quality chunks, it's computationally expensive and more complex to implement. For most applications, the simpler approaches work well enough.</p>
+
+    <h3>Choosing the Right Strategy</h3>
+    <p>Your choice of chunking strategy depends entirely on your specific use case:</p>
+    <table>
+      <thead><tr><th>Your situation</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td>Consistent document structure</td><td><strong>Structure-based</strong> — cleanest results</td></tr>
+        <tr><td>Mixed document types</td><td><strong>Sentence-based</strong> often works well</td></tr>
+        <tr><td>Code or technical content</td><td><strong>Character-based</strong> — most reliable</td></tr>
+        <tr><td>Unknown document formats</td><td><strong>Character-based</strong> — safest bet</td></tr>
+      </tbody>
+    </table>
+    <blockquote><p>Chunking is often an <strong>iterative process</strong>. Start with a simple approach, test it with your specific documents and use cases, then refine based on the results. The "best" chunking strategy is the one that works reliably for your particular data and requirements.</p></blockquote>
+
+    <!-- ============ EMBEDDINGS ============ -->
+    <h2 id="embeddings">Text Embeddings</h2>
+    <p>After extracting text chunks from a document, the next step in a RAG pipeline is <strong>finding which chunks are most relevant</strong> to a user's question. This is essentially a <strong>search problem</strong> — you need to look through all your chunks and identify the ones that relate to what the user is asking about.</p>
+
+    <h3>Semantic Search</h3>
+    <p>The <strong>most common approach</strong> for finding relevant chunks is <strong>semantic search</strong>. Unlike traditional <strong>keyword-based search</strong>, semantic search uses <strong>text embeddings</strong> to understand the actual meaning of both the user's question and each text chunk. This allows the system to find <strong>conceptually related content</strong> even when the exact words don't match.</p>
+
+    <h3>What Are Text Embeddings?</h3>
+    <p>A text embedding is a <strong>numerical representation</strong> of the meaning contained in some text. Think of it as converting words and sentences into a format that computers can work with mathematically.</p>
+    <h4>How the process works</h4>
+    <ul>
+      <li>You feed text into an embedding model</li>
+      <li>The model outputs a long list of numbers (the embedding)</li>
+      <li>Each number ranges from <code>-1</code> to <code>+1</code></li>
+      <li>These numbers represent different qualities or features of the input text</li>
+    </ul>
+
+    <h3>Embeddings on Vertex AI</h3>
+    <p>Claude <strong>can't generate embeddings directly</strong>. Instead, you need to use a specialised embedding model. On Vertex AI, the model we'll use is called <code>text-embedding-005</code>.</p>
+
+    <!-- ============ FULL FLOW ============ -->
+    <h2 id="flow">The Full RAG Flow</h2>
+
+    <h3>Step 1 — Chunk Your Source Text</h3>
+    <p>First, we take our source document and break it into manageable chunks. For this example, we'll use two simple text sections:</p>
+    <table>
+      <tbody>
+        <tr><td class="key">Section 1<br>Medical Research</td><td>"This year saw significant strides in our understanding of XDR-47, a 'bug' we have not seen before."</td></tr>
+        <tr><td class="key">Section 2<br>Software Engineering</td><td>"This division dedicated significant effort to studying various infection vectors in our distributed systems"</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Step 2 — Generate Embeddings</h3>
+    <p>Next, we convert each text chunk into numerical embeddings. To make this easier to understand, let's imagine we have a perfect embedding model that always returns exactly two numbers, and we know what each number represents.</p>
+    <p>In our imaginary model:</p>
+    <ul>
+      <li><strong>First number:</strong> how much the text talks about medicine</li>
+      <li><strong>Second number:</strong> how much the text talks about software engineering</li>
+    </ul>
+
+    <div class="vec">
+      <div class="item">
+        <div class="label">Medical Research</div>
+        <div class="val">[0.97, 0.34]</div>
+        <div class="sub">Very medical, somewhat software-related due to the word "bug"</div>
+      </div>
+      <div class="item">
+        <div class="label">Software Engineering</div>
+        <div class="val">[0.30, 0.97]</div>
+        <div class="sub">Very software-focused, but "infection vectors" has medical connotations</div>
+      </div>
+    </div>
+
+    <h3>Normalization</h3>
+    <p>Before storing these embeddings, they go through a <strong>normalization</strong> process that scales each vector to have a magnitude of <code>1.0</code>. This is typically handled automatically by your embedding API, but it's important to understand it happens.</p>
+    <p>After normalization, our embeddings become:</p>
+    <div class="vec">
+      <div class="item">
+        <div class="label">Medical — normalized</div>
+        <div class="val">[0.944, 0.331]</div>
+      </div>
+      <div class="item">
+        <div class="label">Software — normalized</div>
+        <div class="val">[0.295, 0.955]</div>
+      </div>
+    </div>
+    <p>We can visualise these on a <strong>unit circle</strong>, where both points lie exactly on the circle's edge.</p>
+
+    <h3>Step 3 — Store in a Vector Database</h3>
+    <p>The normalized embeddings get stored in a <strong>vector database</strong> — a specialised database optimised for storing, comparing, and searching through long lists of numbers like our embeddings.</p>
+
+    <div class="correction">
+      <span class="tag">Check this — likely note-taking slip</span>
+      <p>The notes say <em>"ChromeDB … a managed vector database service that runs on Google Cloud."</em> The database is almost certainly <strong>ChromaDB</strong> (Chroma), and Chroma is an <strong>open-source</strong> vector database you run yourself or embed in your app — not a Google-managed service. Google Cloud's own managed option is <strong>Vertex AI Vector Search</strong>. Worth confirming against the course material which one it actually used.</p>
+    </div>
+
+    <h3>Step 4 — Process the User Query</h3>
+    <p>At this point, we pause. All the work so far has been <strong>preprocessing</strong> that happens ahead of time. Now we wait for a user to submit a query.</p>
+    <p>The query gets embedded as <code>[0.1, 0.89]</code> — low medical score, high software engineering score. After normalization, it becomes <code>[0.112, 0.993]</code>.</p>
+
+    <h3>Step 5 — Find Similar Embeddings</h3>
+    <p>Now we ask the vector database: <em>"Find the stored embedding that's closest to this user query embedding."</em> The database returns the <strong>software engineering</strong> section because it's the most similar.</p>
+    <p>But how does the database determine "closest"? It uses <strong>cosine similarity</strong>.</p>
+
+    <h4>Cosine similarity</h4>
+    <p>The vector database calculates the cosine of the angle between vectors to measure similarity. This gives us a number between <code>-1</code> and <code>1</code>:</p>
+    <table>
+      <tbody>
+        <tr><td class="key">1.0</td><td>Vectors point in exactly the same direction — <strong>very similar</strong></td></tr>
+        <tr><td class="key">0.0</td><td>Vectors are perpendicular — <strong>unrelated</strong></td></tr>
+        <tr><td class="key">−1.0</td><td>Vectors point in opposite directions — <strong>very different</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Step 6 — Build the Final Prompt</h3>
+    <p>Finally, we take the user's question and the most relevant text chunk (the software engineering section) and combine them into a prompt for Claude.</p>
+    <blockquote><p>And that's the complete RAG pipeline. The system successfully found the most relevant context for the user's software engineering question and provided it to Claude for generating an informed response.</p></blockquote>
+    <p>This process happens automatically every time a user submits a query, allowing Claude to answer questions based on <strong>your specific documents</strong> rather than just its general training knowledge.</p>
+
+    <!-- ============ BM25 ============ -->
+    <h2 id="bm25">BM25 Lexical Search</h2>
+    <p>When building a RAG pipeline, you'll quickly discover that semantic search alone doesn't always return the best results. Sometimes you need <strong>exact term matches</strong> that semantic search might miss. The solution is to combine semantic search with <strong>lexical search</strong> using a technique called <strong>BM25</strong>.</p>
+
+    <h3>The Problem with Semantic Search Alone</h3>
+    <p>Say you're searching for a specific incident ID like <code>INC-2023-Q4-011</code> in a document. While this exact term appears multiple times in relevant sections, semantic search might return unrelated sections that are semantically similar but don't actually contain the specific term you're looking for.</p>
+    <p>This happens because semantic search focuses on <strong>meaning</strong> rather than exact matches. When you need precise term matching, you need a different approach.</p>
+
+    <h3>Hybrid Search Strategy</h3>
+    <p>The solution is to run two searches <strong>in parallel</strong> and merge the results:</p>
+    <table>
+      <tbody>
+        <tr><td class="key">Semantic search</td><td>Uses embeddings and vector databases for meaning-based matching</td></tr>
+        <tr><td class="key">Lexical search</td><td>Uses classic text search for exact term matching</td></tr>
+        <tr><td class="key">Merge results</td><td>Combines both result sets for better coverage</td></tr>
+      </tbody>
+    </table>
+
+    <div class="flow">
+      <span class="step">Query</span><span class="arrow">→</span>
+      <span class="step">Semantic search</span>
+      <span class="arrow">+</span>
+      <span class="step">Lexical search (BM25)</span><span class="arrow">→</span>
+      <span class="step final">Merged results</span>
+    </div>
+
+    <h3>How BM25 Works</h3>
+    <p><strong>BM25</strong> (Best Match 25) is a popular algorithm for lexical search in RAG pipelines. It processes a search query in four key steps:</p>
+    <ol>
+      <li><strong>Tokenize the query</strong> — break the user's question into individual terms</li>
+      <li><strong>Count term frequency</strong> — see how often each term appears across all documents</li>
+      <li><strong>Weight terms by rarity</strong> — terms used less frequently get higher importance scores</li>
+      <li><strong>Find best matches</strong> — return chunks that contain more instances of the higher-weighted terms</li>
+    </ol>
+    <blockquote><p>The key insight is that <strong>rare terms</strong> like <code>INC-2023-Q4-011</code> are much more important for search than common words like "a" or "the".</p></blockquote>
+
+    <!-- ============ MULTI-INDEX ============ -->
+    <h2 id="multi-index">Multi-Index RAG Pipeline</h2>
+    <p>When semantic search (using vector embeddings) and lexical search (using BM25) are combined, we get a hybrid search strategy that leverages the strengths of both approaches while mitigating their weaknesses. This is called a <strong>multi-index RAG pipeline</strong>.</p>
+
+    <h3>Creating a Unified Interface</h3>
+    <p>Both search implementations share nearly identical APIs — they both have <code>add_document()</code> and <code>search()</code> methods that work the same way. This consistency makes it straightforward to wrap them in a single <strong>Retriever</strong> class.</p>
+    <p>The Retriever acts as a <strong>coordinator</strong> that:</p>
+    <ol>
+      <li>Forwards user queries to both indexes</li>
+      <li>Collects their results</li>
+      <li>Merges them into a single ranked list</li>
+    </ol>
+
+    <div class="flow">
+      <span class="step">Query</span><span class="arrow">→</span>
+      <span class="step">Retriever</span><span class="arrow">→</span>
+      <span class="step">Vector index</span>
+      <span class="arrow">+</span>
+      <span class="step">BM25 index</span><span class="arrow">→</span>
+      <span class="step">RRF merge</span><span class="arrow">→</span>
+      <span class="step final">Ranked results</span>
+    </div>
+
+    <h3>Reciprocal Rank Fusion</h3>
+    <p>The challenge is merging results from different search methods that use <strong>different scoring systems</strong>. Vector search returns cosine similarity scores, while BM25 returns relevance scores — you can't simply combine these numbers directly.</p>
+    <p>Instead, we use a technique called <strong>Reciprocal Rank Fusion (RRF)</strong>. This method focuses on the <strong>rank position</strong> of results rather than their raw scores.</p>
+
+    <h3>Testing the Hybrid Approach</h3>
+    <p>When testing with the query <em>"what happened with INC-2023-Q4-011?"</em>, the hybrid approach delivers much better results than vector search alone.</p>
+
+    <h3>Benefits of the Hybrid Architecture</h3>
+    <table>
+      <thead><tr><th>Benefit</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Modular design</td><td>Each search index is implemented independently with the same API</td></tr>
+        <tr><td class="key">Easy extensibility</td><td>Add new search methods by implementing the same <code>search()</code> and <code>add_document()</code> interface</td></tr>
+        <tr><td class="key">Better accuracy</td><td>Combines semantic understanding with exact keyword matching</td></tr>
+        <tr><td class="key">Flexible fusion</td><td>The RRF algorithm works regardless of how many search indexes you combine</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============ RE-RANKING ============ -->
+    <h2 id="rerank">Re-ranking Results</h2>
+    <p>The hybrid retrieval approach we've built works well, but it still has some rough edges. When we search for <em>"what did the eng team do with INC-2023-Q4-011?"</em>, we'd expect the Software Engineering section to rank higher, since it specifically mentions the engineering team and the incident. However, the Cybersecurity section still comes first.</p>
+    <p>This is where <strong>re-ranking</strong> comes in — a post-processing technique that can significantly improve retrieval accuracy.</p>
+
+    <h3>How Re-ranking Works</h3>
+    <p>Re-ranking adds an <strong>extra step after</strong> your hybrid search process. Instead of just returning the merged results from your vector and BM25 indexes, you pass those results through an LLM for intelligent reordering.</p>
+    <p>The process is straightforward:</p>
+    <ol>
+      <li>Run your existing hybrid search (vector + BM25)</li>
+      <li>Merge the results as before</li>
+      <li>Send the merged results to Claude with a <strong>re-ranking prompt</strong></li>
+      <li>Get back a reordered list of the most relevant documents</li>
+    </ol>
+
+    <div class="flow">
+      <span class="step">Hybrid search</span><span class="arrow">→</span>
+      <span class="step">Merge</span><span class="arrow">→</span>
+      <span class="step">Claude — re-rank prompt</span><span class="arrow">→</span>
+      <span class="step final">Reordered results</span>
+    </div>
+
+    <h3>Trade-offs</h3>
+    <table>
+      <tbody>
+        <tr><td class="key">✅ Improved accuracy</td><td>The LLM can understand context and intent better than pure similarity scores</td></tr>
+        <tr><td class="key">⚠️ Increased latency</td><td>You now need to wait for an additional LLM call to complete</td></tr>
+        <tr><td class="key">⚠️ Cost considerations</td><td>Each search now requires an LLM API call</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ============ CONTEXTUAL RETRIEVAL ============ -->
+    <h2 id="contextual">Contextual Retrieval</h2>
+    <p>Contextual retrieval is a technique that improves RAG pipeline accuracy by solving a fundamental problem: <strong>when you split a document into chunks, each chunk loses its connection to the broader document context.</strong></p>
+
+    <h3>The Problem with Standard Chunking</h3>
+    <p>When you take a source document and break it into chunks for your vector database, each individual piece no longer knows where it came from or how it relates to the rest of the document. This can hurt retrieval accuracy because the chunks lack important contextual information.</p>
+
+    <h3>How Contextual Retrieval Works</h3>
+    <p>Contextual retrieval adds a <strong>preprocessing step before</strong> inserting chunks into your retriever database. The process:</p>
+    <ol>
+      <li>Take each individual chunk <strong>and</strong> the original source document</li>
+      <li>Send both to Claude with a specific prompt asking it to add context</li>
+      <li>Claude generates a short snippet that <strong>"situates"</strong> the chunk within the larger document</li>
+      <li>Combine this context with the original chunk to create a <strong>"contextualized chunk"</strong></li>
+      <li>Use the contextualized chunk in your vector and BM25 indexes</li>
+    </ol>
+
+    <div class="flow">
+      <span class="step">Chunk</span>
+      <span class="arrow">+</span>
+      <span class="step">Source document</span><span class="arrow">→</span>
+      <span class="step">Claude</span><span class="arrow">→</span>
+      <span class="step">Context snippet</span><span class="arrow">→</span>
+      <span class="step final">Contextualized chunk</span>
+    </div>
+
+    <h3>Handling Large Documents</h3>
+    <p>A common problem is when your source document is <strong>too large to fit into Claude's context window</strong>. You can still use contextual retrieval by providing a reduced set of context.</p>
+    <p>Instead of including the entire document, provide:</p>
+    <ul>
+      <li>A few chunks from the <strong>start</strong> of the document (often containing summaries or abstracts)</li>
+      <li>Chunks <strong>immediately before</strong> the chunk you're contextualizing</li>
+    </ul>
+    <p>This approach gives Claude enough information to understand the document structure and immediate context without overwhelming the prompt.</p>
+
+    <h3>When to Use Contextual Retrieval</h3>
+    <p>This technique is most valuable when:</p>
+    <ul>
+      <li>Your documents have <strong>complex internal relationships</strong> between sections</li>
+      <li>Chunks <strong>reference concepts defined elsewhere</strong> in the document</li>
+      <li>Understanding the <strong>document structure</strong> is important for accurate retrieval</li>
+      <li>You're working with <strong>technical documents, reports, or academic papers</strong></li>
+    </ul>
+    <blockquote><p>While contextual retrieval adds processing time and cost (since you're making additional API calls), it can significantly improve retrieval accuracy for complex documents where context matters.</p></blockquote>
+
+    <div class="footer">
+      Study notes — Claude Certified Architect (Foundations), Anthropic Academy · 19 September 2026
+    </div>
+
+  </div>
+  </main>
+</div>
+
+<script>
+// Scroll-spy: highlight the current section in the sidebar
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var targets = links
+    .map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); })
+    .filter(Boolean);
+  if (!targets.length || !('IntersectionObserver' in window)) return;
+
+  var visible = new Set();
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { visible.add(e.target.id); } else { visible.delete(e.target.id); }
+    });
+    for (var i = 0; i < targets.length; i++) {
+      if (visible.has(targets[i].id)) {
+        links.forEach(function (a) { a.classList.remove('active'); });
+        links[i].classList.add('active');
+        break;
+      }
+    }
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+
+  targets.forEach(function (t) { observer.observe(t); });
+})();
+</script>
+</body>
+</html>
