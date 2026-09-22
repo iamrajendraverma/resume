@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meet Claude — Study Notes</title>
+<style>
+:root{
+  --navy:#14365c; --navy-lt:#26527f; --teal:#0f766e; --teal-lt:#14958a;
+  --ink:#1f2b38; --body:#33414f; --muted:#6b7684;
+  --rule:#e2e8ee; --bg:#f4f6f9; --surface:#ffffff;
+  --wash:#f2f8f7; --wash-br:#cfe4e1;
+  --amber:#8a6100; --amber-bg:#fdf6e6; --amber-br:#ecd9a8;
+  --rose:#8c2f39; --rose-bg:#fdf2f3; --rose-br:#eecdd1;
+  --code-bg:#12212f; --code-fg:#dfe8f0; --code-mut:#7f95aa;
+  --max:790px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --navy:#8fb8e8; --navy-lt:#a9caf0; --teal:#5fcfc2; --teal-lt:#7fdcd0;
+    --ink:#e8eef5; --body:#c2ceda; --muted:#8c9bab;
+    --rule:#2a3947; --bg:#0e1620; --surface:#16202c;
+    --wash:#14282a; --wash-br:#23484a;
+    --amber:#e8c37a; --amber-bg:#2a2314; --amber-br:#4e401f;
+    --rose:#eaa1aa; --rose-bg:#2b1619; --rose-br:#54282e;
+    --code-bg:#0a121b; --code-fg:#dfe8f0; --code-mut:#7f95aa;
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+  background:var(--bg); color:var(--body);
+  font-size:16px; line-height:1.68; -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex; gap:44px; max-width:1180px; margin:0 auto; padding:40px 28px 80px}
+
+/* ---- Sidebar TOC ---- */
+.toc{width:232px; flex:0 0 232px; position:sticky; top:40px; align-self:flex-start; font-size:13.5px}
+.toc h2{
+  font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted); font-weight:700; margin-bottom:12px; padding-left:13px;
+}
+.toc a{
+  display:block; color:var(--muted); text-decoration:none;
+  padding:5px 0 5px 13px; border-left:2px solid var(--rule);
+  transition:color .15s, border-color .15s;
+}
+.toc a:hover{color:var(--navy)}
+.toc a.active{color:var(--navy); border-left-color:var(--teal); font-weight:600}
+
+/* ---- Article ---- */
+.article{flex:1; min-width:0; max-width:var(--max)}
+.card{
+  background:var(--surface); border-radius:10px; padding:52px 56px 60px;
+  box-shadow:0 1px 2px rgba(20,54,92,.06), 0 10px 34px rgba(20,54,92,.07);
+  border-top:3px solid var(--navy);
+}
+@media (prefers-color-scheme:dark){.card{box-shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.3)}}
+
+.eyebrow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px}
+.chip{
+  display:inline-block; background:var(--navy); color:#fff;
+  font-size:10.5px; font-weight:700; letter-spacing:.9px; text-transform:uppercase;
+  padding:3px 10px; border-radius:11px;
+}
+@media (prefers-color-scheme:dark){.chip{background:var(--navy); color:#0e1620}}
+.eyebrow .course{font-size:12.5px; color:var(--muted); letter-spacing:.2px}
+
+h1{
+  font-size:34px; line-height:1.2; color:var(--ink); font-weight:700;
+  letter-spacing:-.4px; margin-bottom:10px;
+}
+.lede{
+  font-size:17.5px; line-height:1.62; color:var(--body);
+  padding-bottom:26px; border-bottom:1px solid var(--rule); margin-bottom:34px;
+}
+
+h2{
+  font-size:22px; color:var(--navy); font-weight:700; letter-spacing:-.2px;
+  margin:46px 0 16px; padding-bottom:8px; border-bottom:1.5px solid var(--rule);
+  scroll-margin-top:28px;
+}
+h2::before{
+  content:''; display:inline-block; width:4px; height:17px; background:var(--teal);
+  margin-right:10px; vertical-align:-2px; border-radius:1px;
+}
+h3{font-size:17px; color:var(--ink); font-weight:700; margin:30px 0 10px; scroll-margin-top:28px}
+h4{
+  font-size:12px; color:var(--teal); font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; margin:24px 0 8px;
+}
+p{margin-bottom:14px}
+strong{color:var(--ink); font-weight:600}
+em{color:var(--body)}
+a{color:var(--navy); text-decoration:underline; text-underline-offset:2px}
+
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:6px; padding-left:4px}
+li::marker{color:var(--teal)}
+ol li::marker{font-weight:700; font-size:14px}
+
+/* ---- Callouts ---- */
+blockquote{
+  background:var(--wash); border-left:3px solid var(--teal);
+  padding:15px 20px; margin:20px 0; border-radius:0 5px 5px 0;
+}
+blockquote p:last-child{margin-bottom:0}
+.note, .correction{
+  padding:15px 20px; margin:22px 0; border-radius:5px; font-size:14.5px;
+  border-left:3px solid;
+}
+.note{background:var(--amber-bg); border-color:var(--amber-br); border-left-color:var(--amber)}
+.correction{background:var(--rose-bg); border-color:var(--rose-br); border-left-color:var(--rose)}
+.note .tag, .correction .tag{
+  display:block; font-size:10.5px; font-weight:700; letter-spacing:1.1px;
+  text-transform:uppercase; margin-bottom:5px;
+}
+.note .tag{color:var(--amber)} .correction .tag{color:var(--rose)}
+.note p:last-child, .correction p:last-child{margin-bottom:0}
+.info{background:var(--wash); border-left:3px solid var(--teal); padding:15px 20px; margin:22px 0; border-radius:5px; font-size:14.5px}
+.info .tag{display:block; font-size:10.5px; font-weight:700; letter-spacing:1.1px; text-transform:uppercase; margin-bottom:5px; color:var(--teal)}
+.info p:last-child{margin-bottom:0}
+
+/* ---- Tables ---- */
+table{width:100%; border-collapse:collapse; margin:20px 0; font-size:14.5px}
+th{
+  text-align:left; background:var(--wash); color:var(--navy);
+  font-size:11px; font-weight:700; letter-spacing:.9px; text-transform:uppercase;
+  padding:10px 14px; border-bottom:1.5px solid var(--wash-br);
+}
+td{padding:11px 14px; border-bottom:1px solid var(--rule); vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.key{font-weight:600; color:var(--navy); white-space:nowrap; width:1%}
+
+/* ---- Code ---- */
+pre{
+  background:var(--code-bg); color:var(--code-fg); padding:18px 20px;
+  border-radius:7px; overflow-x:auto; margin:18px 0;
+  font-size:13px; line-height:1.6;
+}
+pre code{font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace}
+code{
+  font-family:'SF Mono',Menlo,Consolas,monospace; font-size:.88em;
+  background:var(--wash); color:var(--teal);
+  padding:1.5px 5px; border-radius:3px; border:1px solid var(--wash-br);
+}
+pre code{background:none; color:inherit; padding:0; border:none; font-size:inherit}
+.pre-label{
+  display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted); margin:18px 0 -8px;
+}
+
+/* ---- Pipeline diagram ---- */
+.flow{
+  display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  background:var(--wash); border:1px solid var(--wash-br);
+  padding:18px; border-radius:7px; margin:20px 0;
+}
+.flow .step{
+  background:var(--surface); border:1px solid var(--wash-br); color:var(--navy);
+  font-size:12.5px; font-weight:600; padding:7px 13px; border-radius:5px; white-space:nowrap;
+}
+.flow .arrow{color:var(--teal); font-weight:700}
+.flow .step.final{background:var(--navy); color:#fff; border-color:var(--navy)}
+@media (prefers-color-scheme:dark){.flow .step.final{color:#0e1620}}
+
+/* ---- Role cards ---- */
+.roles{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin:20px 0}
+.roles .role{border:1px solid var(--rule); border-radius:7px; padding:16px 18px; background:var(--surface)}
+.roles .role h3{margin:0 0 4px; font-size:14.5px; color:var(--navy)}
+.roles .role p.sub{font-size:12.5px; color:var(--muted); line-height:1.5; margin-bottom:10px}
+.roles .role ul{margin:0 0 0 18px; font-size:13.5px}
+.roles .role li{margin-bottom:5px}
+
+hr{border:none; border-top:1px solid var(--rule); margin:40px 0}
+.footer{margin-top:46px; padding-top:18px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--muted)}
+
+/* ---- Responsive ---- */
+@media (max-width:980px){
+  .layout{flex-direction:column; gap:0; padding:24px 18px 60px}
+  .toc{width:100%; flex:none; position:static; margin-bottom:26px;
+       background:var(--surface); border-radius:8px; padding:18px 20px;
+       box-shadow:0 1px 2px rgba(20,54,92,.06)}
+  .toc a{border-left:none; padding:4px 0}
+  .toc a.active{border-left:none}
+  .card{padding:32px 24px 40px; border-radius:8px}
+  h1{font-size:27px} .lede{font-size:16px}
+}
+
+/* ---- Print ---- */
+@page{size:A4; margin:16mm}
+@media print{
+  body{background:#fff; font-size:10.5pt; line-height:1.5; color:#000}
+  .layout{display:block; padding:0; max-width:100%}
+  .toc{display:none}
+  .card{box-shadow:none; border-top:none; padding:0; border-radius:0}
+  .article{max-width:100%}
+  h2,h3{page-break-after:avoid}
+  pre,table,blockquote,.note,.correction,.info,.flow,.roles .role{page-break-inside:avoid}
+  pre{background:#f4f6f8; color:#12212f; border:1px solid #d5dde5}
+  a{color:#000; text-decoration:none}
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h2>Contents</h2>
+    <a href="#excels">What Claude Excels At</a>
+    <a href="#prompt">Writing a Good Prompt</a>
+    <a href="#projects">Projects</a>
+    <a href="#artifacts">Artifacts</a>
+    <a href="#skills">Skills</a>
+    <a href="#connectors">Connectors</a>
+    <a href="#research">Researching with Claude</a>
+    <a href="#roles">Use Cases by Role</a>
+    <a href="#next">What's Next</a>
+  </nav>
+
+  <main class="article">
+  <div class="card">
+
+    <div class="eyebrow">
+      <span class="chip">22 September 2026</span>
+      <span class="course">Study notes &mdash; Claude 101, Anthropic Academy</span>
+    </div>
+
+    <h1>Meet Claude</h1>
+
+    <p class="lede">What Claude is good at, how to prompt it well, and the four building blocks you'll actually work with day to day: <strong>projects</strong> for knowledge, <strong>artifacts</strong> for outputs, <strong>skills</strong> for repeatable process, and <strong>connectors</strong> for your real data.</p>
+
+    <!-- ============ WHAT CLAUDE EXCELS AT ============ -->
+    <h2 id="excels">What Claude Excels At</h2>
+    <ul>
+      <li><strong>Writing and content creation</strong> &mdash; Claude can collaborate with you on social media posts, professional emails, and complex reports. Because Claude is trained to take direction on personality and tone, you can iterate together on structure and clarity until your voice comes through clearly.</li>
+      <li><strong>Research and analysis</strong> &mdash; Claude helps you explore research angles, compile findings, and analyze data to surface meaningful insights. You can upload documents and Claude will help you make sense of complex information. This is enabled by Claude's large context window, which can ingest 200K+ tokens (about 500 pages of text or more), with up to <strong>1M tokens</strong> available on Pro, Max, Team, and Enterprise plans when using supported models &mdash; so Claude can consider extensive materials in a single conversation.</li>
+      <li><strong>Coding assistance</strong> &mdash; Coding is one of Claude's greatest strengths. Its strong performance on real-world coding tasks means it can help you write, debug, and explain code across many programming languages.</li>
+      <li><strong>Problem-solving and reasoning</strong> &mdash; Claude handles complex cognitive tasks, mathematical problems, strategic thinking and analysis, and research. Claude can respond near-instantly or take time to reason first &mdash; a capability called <strong>Thinking</strong>. When a problem calls for careful analysis, Claude can work through it step by step before it answers.</li>
+      <li><strong>Learning new things</strong> &mdash; Whether you're picking up a new skill, exploring unfamiliar domains, or working through complex challenges, Claude can adapt to your learning style and pace. <strong>Learning mode</strong> guides your reasoning process rather than handing over answers, which helps develop critical thinking skills.</li>
+    </ul>
+    <p>Get inspired on ways to use Claude in your specific function by exploring the use-case gallery. For a deeper dive into what AI can (and can't) do, see the AI Capabilities course.</p>
+
+    <!-- ============ PROMPTING ============ -->
+    <h2 id="prompt">Writing a Good Prompt</h2>
+    <p>A good prompt comes together in three stages:</p>
+
+    <div class="flow">
+      <span class="step">1. Set the stage</span><span class="arrow">&rarr;</span>
+      <span class="step">2. Define the task</span><span class="arrow">&rarr;</span>
+      <span class="step final">3. Specify the rules</span>
+    </div>
+
+    <ol>
+      <li><strong>Set the stage</strong> &mdash; give Claude the role, audience, and context.</li>
+      <li><strong>Define the task</strong> &mdash; say exactly what you want produced.</li>
+      <li><strong>Specify the rules</strong> &mdash; constraints, format, sourcing requirements.</li>
+    </ol>
+
+    <h3>Example</h3>
+    <span class="pre-label">Prompt</span>
+<pre><code>Create a market analysis report on the US indie film streaming opportunity.
+Include market size, growth trends, key competitors, consumer preferences,
+revenue models, and market gaps. Use current web research with citations.
+Structure it as a professional report for an investor deck for a new indie
+streaming app.</code></pre>
+
+    <blockquote><p>Then add your own concept and context on top of the template &mdash; the more specific the stage and the rules, the closer the first draft lands.</p></blockquote>
+
+    <!-- ============ PROJECTS ============ -->
+    <h2 id="projects">Projects</h2>
+    <p>Projects are ideal for:</p>
+    <ul>
+      <li>storing knowledge Claude should reference,</li>
+      <li>organizing related chats around a specific topic or work area, and</li>
+      <li>collaborating with team members who need access to the same shared context.</li>
+    </ul>
+
+    <h3>How Projects Handle Large Knowledge Bases</h3>
+    <p>You might wonder what happens when you upload a lot of content. Projects automatically scale to handle large amounts through a process called <strong>Retrieval Augmented Generation (RAG)</strong>. At a high level, Claude can automatically find and use the most relevant parts of your uploaded documents when answering, without you needing to tell it which file to look at.</p>
+    <p>When your project knowledge approaches the context window limit, Claude stops loading everything at once and instead <strong>searches</strong> your project's files, retrieving only what's relevant to your question. This expands your project's capacity by up to <strong>10x</strong> while maintaining response quality.</p>
+    <p>You'll see a visual indicator when your project is RAG-enabled, but the experience should feel the same &mdash; you can still upload documents, chat with Claude, and get context-aware responses.</p>
+
+    <h3>Collaboration: Permission Levels</h3>
+    <p>When sharing a project, you can choose from three permission levels:</p>
+    <table>
+      <thead><tr><th>Level</th><th>What it allows</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Can view</td><td>See project contents, access knowledge, and chat &mdash; but can't make changes. Read-only access with discussion rights.</td></tr>
+        <tr><td class="key">Can edit</td><td>Full collaboration power: modify instructions, update knowledge, manage other members, and actively contribute.</td></tr>
+        <tr><td class="key">Owner</td><td>Project creators control everything, including who sees the project &mdash; specific people, or the entire organization.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Best Practices for Projects</h3>
+    <ul>
+      <li><strong>Start focused, then expand.</strong> Begin with a specific use case rather than trying to create one project for everything. You can always add more content as you go.</li>
+      <li><strong>Keep your knowledge base current.</strong> Outdated documents lead to outdated responses. Review and update project knowledge periodically.</li>
+      <li><strong>Write clear instructions.</strong> Be specific about what you want; vague instructions lead to inconsistent results.</li>
+      <li><strong>Name your documents descriptively.</strong> Use <code>Q4-2025-Sales-Report.pdf</code>, not <code>report.pdf</code>, and group related files together. Claude uses filenames and proximity to understand relationships between documents.</li>
+      <li><strong>Reference documents by name.</strong> Mention specific documents to help Claude focus its search: <em>"Based on our Q3 report, what were the top customer concerns?"</em></li>
+    </ul>
+
+    <!-- ============ ARTIFACTS ============ -->
+    <h2 id="artifacts">Artifacts</h2>
+    <p>Artifacts are the outputs you create with Claude: a document, a deck, a design, a dashboard, a prototype. Instead of getting a long block of code or text buried in the chat, you see the real thing take shape in a dedicated window alongside your conversation, ready to use and refine.</p>
+    <p>Claude creates an artifact when you ask for something that <strong>stands on its own</strong> &mdash; something you'll want to edit, reuse, or share rather than just read once. If you want to be sure, just say so: <em>"Create this as an artifact."</em></p>
+    <p>On paid plans, an artifact isn't tied to the conversation that created it. Everything you make is saved in the <strong>Artifacts</strong> tab, so you can come back to it later, keep editing, and share it with others. Think of the conversation as where you <em>create</em>, and the Artifacts tab as where your outputs <em>live</em>. (On the Free plan, an artifact stays with the conversation that created it.)</p>
+
+    <h3>Designs, Decks, and Living Documents</h3>
+    <p>Claude has a dedicated way to make each of the most common work deliverables.</p>
+    <div class="note">
+      <span class="tag">Notes incomplete</span>
+      <p>Fill in the specifics for designs, decks, and living documents from the module.</p>
+    </div>
+
+    <!-- ============ SKILLS ============ -->
+    <h2 id="skills">Skills</h2>
+    <p>Skills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Think of them as <strong>expertise packages</strong> &mdash; they teach Claude how to complete specific tasks in a repeatable way.</p>
+    <p>You've already seen Skills at work if you've used Claude to create Excel spreadsheets, PowerPoint presentations, Word documents, or PDFs; those file creation capabilities are powered by Skills running behind the scenes. But Skills go far beyond document creation. Custom Skills can codify entire repeatable workflows &mdash; a quarterly variance analysis methodology, a brand voice review process, a compliance checklist &mdash; so Claude follows the same rigorous steps every time.</p>
+
+    <h3>Types of Skills</h3>
+    <ul>
+      <li><strong>Anthropic Skills</strong> &mdash; created and maintained by Anthropic. These include enhanced document creation capabilities for Excel, Word, PowerPoint, and PDF files. Claude invokes them automatically when relevant, so you don't need to do anything special to use them.</li>
+      <li><strong>Custom Skills</strong> &mdash; ones you or your organization create for specialized workflows and domain-specific tasks. For example, a skill that applies your company's brand guidelines to presentations, structures meeting notes in a specific format, or executes your organization's data analysis workflows.</li>
+    </ul>
+
+    <h3>Enabling Skills</h3>
+    <p>Skills are available on all plans. To use them you need <strong>Code execution and file creation</strong> enabled, since Skills require Claude's secure sandboxed computing environment to function.</p>
+    <ol>
+      <li>Navigate to <strong>Settings &rarr; Capabilities</strong></li>
+      <li>Ensure <strong>Code execution and file creation</strong> is toggled on</li>
+      <li>Scroll to the <strong>Skills</strong> section</li>
+      <li>Toggle individual skills on or off as needed</li>
+    </ol>
+    <table>
+      <thead><tr><th>Plan</th><th>What to know</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Enterprise</td><td>Organization Owners must first enable both Code execution and Skills in Admin settings before individual members can access them.</td></tr>
+        <tr><td class="key">Team</td><td>Enabled by default at the organization level.</td></tr>
+      </tbody>
+    </table>
+    <p>Once enabled, you'll see available Skills listed in your settings, including Anthropic's built-in Skills and any custom Skills you've uploaded.</p>
+
+    <h3>Skills vs. Projects</h3>
+    <p>If both Skills and Projects give Claude more context, when do you use each? <strong>Projects store knowledge; Skills perform tasks.</strong></p>
+    <table>
+      <thead><tr><th></th><th>Projects</th><th>Skills</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Role</td><td>Knowledge hubs</td><td>Procedural machines</td></tr>
+        <tr><td class="key">Holds</td><td>Project specs, meeting notes, research documents</td><td>Steps, order of operations, methodology</td></tr>
+        <tr><td class="key">Answers</td><td>The <strong>what</strong> (information)</td><td>The <strong>how</strong> (process)</td></tr>
+        <tr><td class="key">Best for</td><td>Context Claude should draw on across every conversation in the project</td><td>Repeatable workflows you want run consistently every time</td></tr>
+      </tbody>
+    </table>
+    <blockquote><p>The two complement each other. A skill can reference knowledge stored in a project &mdash; your "customer call prep" skill might pull from customer profiles uploaded to a project's knowledge base.</p></blockquote>
+
+    <!-- ============ CONNECTORS ============ -->
+    <h2 id="connectors">Connectors</h2>
+    <h4>Key takeaways</h4>
+    <ul>
+      <li>Connectors transform Claude from an assistant into an <strong>informed collaborator</strong> by giving it access to the same tools, data, and context you use every day. Instead of starting every conversation from scratch, Claude can work directly with your actual information.</li>
+      <li>Connectors let Claude <strong>read information and perform actions</strong> on your behalf. Depending on the connector and the permissions you grant, Claude can search your files, retrieve documents, analyze data, create new content, update records, and execute tasks across your connected applications &mdash; all from within your conversation.</li>
+      <li>The <strong>Model Context Protocol (MCP)</strong> powers connectors. Think of MCP as USB-C for AI: a universal standard that lets Claude connect to many different applications through a single, consistent interface. Because it's an open standard, developers can build connectors for any tool and those connectors work seamlessly with Claude.</li>
+      <li>There are <strong>two types</strong> of connectors &mdash; see below.</li>
+    </ul>
+    <table>
+      <thead><tr><th>Type</th><th>What it connects</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Web connectors</td><td>Cloud services like Google Drive, Notion, Slack, and Asana.</td></tr>
+        <tr><td class="key">Desktop extensions</td><td>Run locally through the Claude Desktop app, giving Claude access to local files and native applications.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Enterprise Search</h3>
+    <p>Enterprise Search adds a dedicated <strong>"Ask {Your Org Name}"</strong> option to your sidebar, designed specifically for finding and synthesizing knowledge buried across your company's tools and data sources. Think of it as a <strong>pre-built project for your entire organization</strong>: your company's knowledge base is already loaded, so you can jump right in and get context-aware responses.</p>
+    <p>Unlike regular chats with connectors enabled, Enterprise Search is built for information gathering, using custom instructions configured by the Anthropic team.</p>
+    <div class="info">
+      <span class="tag">What can you ask?</span>
+      <p>Enterprise Search is particularly valuable for questions that <strong>span multiple sources</strong> or require synthesizing information from across your organization.</p>
+    </div>
+    <div class="note">
+      <span class="tag">Notes incomplete</span>
+      <p>Add the common use cases covered in the module.</p>
+    </div>
+
+    <!-- ============ RESEARCH ============ -->
+    <h2 id="research">Researching with Claude</h2>
+    <p>Research transforms how Claude finds and analyzes information. Instead of a single search, Claude operates <strong>agentically</strong> &mdash; conducting multiple searches that build on each other while determining exactly what to investigate next. It explores different angles of your question automatically and works through open questions systematically.</p>
+    <ul>
+      <li><strong>It takes longer than a usual search</strong> &mdash; a few minutes or more, depending on the question. That's because it isn't one lookup: Claude can send out many searches at once, sometimes across hundreds of sources, and pull what they find into one answer. That work isn't instant.</li>
+      <li><strong>It works with Thinking</strong>, so Claude can plan its approach before it searches. It breaks a complex request into manageable pieces, then gathers what each piece needs.</li>
+      <li><strong>Citations make verification easy.</strong> Research delivers thorough answers complete with easy-to-check citations, so you can trust Claude's findings and quickly verify sources yourself.</li>
+    </ul>
+
+    <!-- ============ ROLES ============ -->
+    <h2 id="roles">Claude in Action: Use Cases by Role</h2>
+
+    <h3>General Professional Use</h3>
+    <p>These use cases apply across many roles and industries.</p>
+    <ul>
+      <li><strong>Generate project status reports</strong> &mdash; keep stakeholders informed with clear, consistent updates.</li>
+      <li><strong>Analyze patterns in user feedback</strong> &mdash; extract insights from customer comments and survey responses.</li>
+      <li><strong>Package your brand guidelines in a skill</strong> &mdash; create a reusable Claude skill that applies your brand standards.</li>
+    </ul>
+
+    <div class="roles">
+      <div class="role">
+        <h3>Sales</h3>
+        <p class="sub">Accelerate deal prep, create compelling materials, and stay on top of competitive intelligence.</p>
+        <ul>
+          <li><strong>Build a battle card library</strong> &mdash; competitive intelligence that helps your team win deals</li>
+          <li><strong>Prepare for sales deals</strong> &mdash; research prospects and organize talking points</li>
+          <li><strong>Create sales reports</strong> &mdash; turn pipeline data into actionable reports</li>
+        </ul>
+      </div>
+      <div class="role">
+        <h3>Marketing</h3>
+        <p class="sub">Analyze performance data and efficiently repurpose content across channels.</p>
+        <ul>
+          <li><strong>Analyze campaign performance</strong> &mdash; extract insights from campaign metrics</li>
+          <li><strong>Adapt content across platforms</strong> &mdash; repurpose for different channels and audiences</li>
+        </ul>
+      </div>
+      <div class="role">
+        <h3>Finance</h3>
+        <p class="sub">Build models, draft documents, and make sense of complex spreadsheets.</p>
+        <ul>
+          <li><strong>Build financial models</strong> &mdash; create and refine projections</li>
+          <li><strong>Draft investment memos</strong> &mdash; structure and write analyses efficiently</li>
+          <li><strong>Extend an inherited spreadsheet</strong> &mdash; decode it, then add functionality</li>
+        </ul>
+      </div>
+      <div class="role">
+        <h3>HR</h3>
+        <p class="sub">Create better onboarding experiences and documentation.</p>
+        <ul>
+          <li><strong>Create new hire onboarding guides</strong> &mdash; comprehensive materials tailored to each role</li>
+        </ul>
+      </div>
+      <div class="role">
+        <h3>Legal</h3>
+        <p class="sub">Track complex timelines and manage discovery processes.</p>
+        <ul>
+          <li><strong>Track discovery timelines and analyze patterns</strong> &mdash; organize case timelines and identify key patterns in legal documents</li>
+        </ul>
+      </div>
+      <div class="role">
+        <h3>Research</h3>
+        <p class="sub">Plan literature reviews and verify data analysis.</p>
+        <ul>
+          <li><strong>Plan your literature review</strong> &mdash; organize your approach to academic sources</li>
+          <li><strong>Verify statistics from raw data</strong> &mdash; double-check calculations and analyses</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>These examples are just the beginning. Visit the <strong>Use Case Gallery</strong> to browse the full collection and find inspiration for how Claude can help with your specific work.</p>
+
+    <!-- ============ WHAT'S NEXT ============ -->
+    <h2 id="next">What's Next</h2>
+    <p>In the final module, you'll meet a few more ways to work with Claude &mdash; <strong>Claude Code</strong>, <strong>Claude Tag</strong>, <strong>Claude Design</strong> (which also works right inside your conversations), <strong>Claude for Microsoft 365</strong>, and <strong>Claude in Chrome</strong> &mdash; each tailored to where the work actually happens.</p>
+
+    <div class="footer">
+      Study notes &mdash; Claude 101, Anthropic Academy &middot; 22 September 2026
+    </div>
+
+  </div>
+  </main>
+</div>
+
+<script>
+// Scroll-spy: highlight the current section in the sidebar
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var targets = links
+    .map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); })
+    .filter(Boolean);
+  if (!targets.length || !('IntersectionObserver' in window)) return;
+
+  var visible = new Set();
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { visible.add(e.target.id); } else { visible.delete(e.target.id); }
+    });
+    for (var i = 0; i < targets.length; i++) {
+      if (visible.has(targets[i].id)) {
+        links.forEach(function (a) { a.classList.remove('active'); });
+        links[i].classList.add('active');
+        break;
+      }
+    }
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+
+  targets.forEach(function (t) { observer.observe(t); });
+})();
+</script>
+</body>
+</html>
