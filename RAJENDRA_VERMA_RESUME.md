@@ -2,7 +2,7 @@
 
 **AI/ML Solutions Architect | Sr. Technology Consultant**
 
-📧 rajendrarajaramv@gmail.com | 📱 7000-201-0326 | 🔗 [LinkedIn](linkedin.com/in/rajendrarajaramv) | 💻 [GitHub](iamrajendraverma.github.io)
+📧 rajendrarajaramv@gmail.com | 📱 700-0201-326 | 🔗 [LinkedIn](linkedin.com/in/rajendrarajaramv) | 💻 [GitHub](iamrajendraverma.github.io)
 
 ---
 

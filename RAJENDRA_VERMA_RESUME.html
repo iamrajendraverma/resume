@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,27 @@
     <style>
         /* ---- Theme tokens ------------------------------------------------ */
         :root {
-            --navy:    #14365c;  /* primary  - headings, names, rules      */
-            --teal:    #0f766e;  /* accent   - companies, tech, markers    */
-            --ink:     #24303d;  /* body copy                              */
-            --muted:   #6b7480;  /* dates, secondary text                  */
-            --rule:    #d9e0e8;  /* hairlines                              */
-            --wash:    #f3f7f7;  /* chip background                        */
-            --wash-br: #d8e6e4;  /* chip border                            */
+            --navy: #14365c;
+            /* primary  - headings, names, rules      */
+            --teal: #0f766e;
+            /* accent   - companies, tech, markers    */
+            --ink: #24303d;
+            /* body copy                              */
+            --muted: #6b7480;
+            /* dates, secondary text                  */
+            --rule: #d9e0e8;
+            /* hairlines                              */
+            --wash: #f3f7f7;
+            /* chip background                        */
+            --wash-br: #d8e6e4;
+            /* chip border                            */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Segoe UI', 'Calibri', 'Helvetica Neue', Arial, sans-serif;
@@ -33,7 +45,7 @@
             background-color: #fff;
             margin: 0 auto;
             padding: 0.5in 0.55in;
-            box-shadow: 0 1px 3px rgba(20,54,92,.10), 0 8px 28px rgba(20,54,92,.10);
+            box-shadow: 0 1px 3px rgba(20, 54, 92, .10), 0 8px 28px rgba(20, 54, 92, .10);
             border-top: 3px solid var(--navy);
         }
 
@@ -68,12 +80,20 @@
             letter-spacing: .2px;
         }
 
-        .contact-info a { color: var(--navy); text-decoration: none; }
+        .contact-info a {
+            color: var(--navy);
+            text-decoration: none;
+        }
 
-        .contact-info .sep { color: var(--rule); margin: 0 6px; }
+        .contact-info .sep {
+            color: var(--rule);
+            margin: 0 6px;
+        }
 
         /* ---- Sections ---------------------------------------------------- */
-        .section { margin-bottom: 11px; }
+        .section {
+            margin-bottom: 11px;
+        }
 
         .section-title {
             font-size: 9px;
@@ -103,7 +123,9 @@
             text-align: justify;
         }
 
-        .summary strong { color: var(--navy); }
+        .summary strong {
+            color: var(--navy);
+        }
 
         /* ---- Skill / expertise rows -------------------------------------- */
         .skill-row {
@@ -114,7 +136,9 @@
             border-bottom: 1px dotted var(--rule);
         }
 
-        .skill-row:last-child { border-bottom: none; }
+        .skill-row:last-child {
+            border-bottom: none;
+        }
 
         .skill-label {
             font-weight: 700;
@@ -122,11 +146,18 @@
             letter-spacing: .2px;
         }
 
-        .skill-value { color: var(--ink); }
+        .skill-value {
+            color: var(--ink);
+        }
 
         /* ---- Experience -------------------------------------------------- */
-        .job { margin-bottom: 8px; }
-        .job:last-child { margin-bottom: 0; }
+        .job {
+            margin-bottom: 8px;
+        }
+
+        .job:last-child {
+            margin-bottom: 0;
+        }
 
         .job-header {
             display: flex;
@@ -182,11 +213,18 @@
 
         .bullets strong,
         .project-bullets strong,
-        .achievement-list strong { color: var(--navy); }
+        .achievement-list strong {
+            color: var(--navy);
+        }
 
         /* ---- Projects ---------------------------------------------------- */
-        .project { margin-bottom: 8px; }
-        .project:last-child { margin-bottom: 0; }
+        .project {
+            margin-bottom: 8px;
+        }
+
+        .project:last-child {
+            margin-bottom: 0;
+        }
 
         .project-title {
             font-size: 9.5px;
@@ -229,7 +267,10 @@
             letter-spacing: .2px;
         }
 
-        .tech-stack a { color: var(--teal); text-decoration: none; }
+        .tech-stack a {
+            color: var(--teal);
+            text-decoration: none;
+        }
 
         /* ---- Education / Certifications ---------------------------------- */
         .edu-item,
@@ -239,7 +280,9 @@
         }
 
         .edu-item:last-child,
-        .cert-item:last-child { border-bottom: none; }
+        .cert-item:last-child {
+            border-bottom: none;
+        }
 
         .edu-degree,
         .cert-item strong {
@@ -248,8 +291,13 @@
         }
 
         /* ---- Achievements ------------------------------------------------ */
-        .achievement-group { margin-bottom: 6px; }
-        .achievement-group:last-child { margin-bottom: 0; }
+        .achievement-group {
+            margin-bottom: 6px;
+        }
+
+        .achievement-group:last-child {
+            margin-bottom: 0;
+        }
 
         .achievement-title {
             font-weight: 700;
@@ -276,7 +324,9 @@
         }
 
         @media print {
-            html, body {
+
+            html,
+            body {
                 background: #fff;
                 margin: 0;
                 padding: 0;
@@ -292,16 +342,28 @@
                 border-top: none;
             }
 
-            .section       { page-break-inside: avoid; }
+            .section {
+                page-break-inside: avoid;
+            }
+
             .job,
             .project,
-            .achievement-group { page-break-inside: avoid; }
-            .section-title { page-break-after: avoid; }
+            .achievement-group {
+                page-break-inside: avoid;
+            }
 
-            a { color: var(--navy); text-decoration: none; }
+            .section-title {
+                page-break-after: avoid;
+            }
+
+            a {
+                color: var(--navy);
+                text-decoration: none;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
@@ -310,8 +372,9 @@
             <div class="title">AI/ML Solutions Architect &nbsp;|&nbsp; Sr. Technology Consultant</div>
             <div class="contact-info">
                 <a href="mailto:rajendrarajaramv@gmail.com">rajendrarajaramv@gmail.com</a>
-                <span class="sep">|</span> +91 7000-201-0326
-                <span class="sep">|</span> <a href="https://linkedin.com/in/rajendrarajaramv">linkedin.com/in/rajendrarajaramv</a>
+                <span class="sep">|</span> +91 700-0201-326
+                <span class="sep">|</span> <a
+                    href="https://linkedin.com/in/rajendrarajaramv">linkedin.com/in/rajendrarajaramv</a>
                 <span class="sep">|</span> <a href="https://iamrajendraverma.github.io">iamrajendraverma.github.io</a>
             </div>
         </div>
@@ -320,7 +383,11 @@
         <div class="section">
             <div class="section-title">Professional Summary</div>
             <div class="summary">
-                Strategic AI/ML Solutions Architect with <strong>10+ years</strong> of full-stack engineering expertise and <strong>1+ year</strong> of hands-on Generative AI experience. Specialized in designing end-to-end AI solutions, evaluating LLMs (Claude AI, OpenAI), and integrating AI into enterprise applications. Proven track record consulting with enterprise clients on AI opportunities, technology selection, and implementation. Actively pursuing Claude certification.
+                Strategic AI/ML Solutions Architect with <strong>10+ years</strong> of full-stack engineering expertise
+                and <strong>1+ year</strong> of hands-on Generative AI experience. Specialized in designing end-to-end
+                AI solutions, evaluating LLMs (Claude AI, OpenAI), and integrating AI into enterprise applications.
+                Proven track record consulting with enterprise clients on AI opportunities, technology selection, and
+                implementation. Actively pursuing Claude certification.
             </div>
         </div>
 
@@ -381,8 +448,10 @@
                 </div>
                 <div class="job-company">Techment, Indore, India</div>
                 <ul class="bullets">
-                    <li>Design enterprise AI/ML solutions leveraging Claude AI, OpenAI; evaluate AI platforms for client needs</li>
-                    <li>Partner with enterprise clients to identify AI opportunities and architect end-to-end implementations</li>
+                    <li>Design enterprise AI/ML solutions leveraging Claude AI, OpenAI; evaluate AI platforms for client
+                        needs</li>
+                    <li>Partner with enterprise clients to identify AI opportunities and architect end-to-end
+                        implementations</li>
                     <li>Architect RAG systems, prompt engineering strategies, and multi-model AI workflows</li>
                     <li>Lead modernization of Android applications with AI features using Jetpack Compose and KMP</li>
                 </ul>
@@ -395,8 +464,10 @@
                 </div>
                 <div class="job-company">Techment, Indore, India</div>
                 <ul class="bullets">
-                    <li>Developed production-grade Android applications; architected solutions using Jetpack Compose</li>
-                    <li>Conducted technical assessments; recommended solutions leveraging cloud services and modern frameworks</li>
+                    <li>Developed production-grade Android applications; architected solutions using Jetpack Compose
+                    </li>
+                    <li>Conducted technical assessments; recommended solutions leveraging cloud services and modern
+                        frameworks</li>
                     <li>Managed code reviews; ensured adherence to SOLID principles and best practices</li>
                 </ul>
             </div>
@@ -408,7 +479,8 @@
                 </div>
                 <div class="job-company">Techment, Indore, India</div>
                 <ul class="bullets">
-                    <li>Architected Android applications with BLE 6.0 (5.4) technology for medical device integration</li>
+                    <li>Architected Android applications with BLE 6.0 (5.4) technology for medical device integration
+                    </li>
                     <li>Implemented secure Bluetooth communication protocols for healthcare applications</li>
                 </ul>
             </div>
@@ -462,17 +534,26 @@
             </div>
 
             <div class="project">
-                <div class="project-title">Techment Hackathon CodeCompass<span class="badge">2nd Prize Winner</span></div>
-                <div class="project-desc">AI tooling solution built on the Model Context Protocol (MCP) client–server architecture</div>
+                <div class="project-title">Techment Hackathon CodeCompass<span class="badge">2nd Prize Winner</span>
+                </div>
+                <div class="project-desc">AI tooling solution built on the Model Context Protocol (MCP) client–server
+                    architecture</div>
                 <ul class="project-bullets">
-                    <li>Designed and built a <strong>host-agnostic MCP server</strong> exposing custom tools and resources over the Model Context Protocol</li>
-                    <li>Delivered <strong>cross-host compatibility</strong> from a single tool contract — consumed by <strong>Claude Desktop, Cursor, and Grok</strong> with no client-specific code</li>
-                    <li>Implemented the <strong>MCP client</strong> that discovers server capabilities and orchestrates tool calls through the LLM</li>
-                    <li>Architected the client–server contract: tool schemas, capability negotiation, transport layer</li>
+                    <li>Designed and built a <strong>host-agnostic MCP server</strong> exposing custom tools and
+                        resources over the Model Context Protocol</li>
+                    <li>Delivered <strong>cross-host compatibility</strong> from a single tool contract — consumed by
+                        <strong>Claude Desktop, Cursor, and Grok</strong> with no client-specific code</li>
+                    <li>Implemented the <strong>MCP client</strong> that discovers server capabilities and orchestrates
+                        tool calls through the LLM</li>
+                    <li>Architected the client–server contract: tool schemas, capability negotiation, transport layer
+                    </li>
                     <li>Presented to judges, earning <strong>2nd Prize</strong> among competing teams</li>
                 </ul>
-                <div class="tech-stack">Model Context Protocol (MCP) &middot; MCP Client/Server &middot; Claude Desktop &middot; Cursor &middot; Grok &middot; LLM Tool Use</div>
-                <div class="tech-stack"><a href="https://github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass">github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass</a></div>
+                <div class="tech-stack">Model Context Protocol (MCP) &middot; MCP Client/Server &middot; Claude Desktop
+                    &middot; Cursor &middot; Grok &middot; LLM Tool Use</div>
+                <div class="tech-stack"><a
+                        href="https://github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass">github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass</a>
+                </div>
             </div>
         </div>
 
@@ -480,7 +561,8 @@
         <div class="section">
             <div class="section-title">Education</div>
             <div class="edu-item">
-                <span class="edu-degree">Master of Computer Applications (MCA)</span> | Manipal University, Jaipur | Nov 2025
+                <span class="edu-degree">Master of Computer Applications (MCA)</span> | Manipal University, Jaipur | Nov
+                2025
             </div>
             <div class="edu-item">
                 <span class="edu-degree">Master of Science in Bioinformatics</span> | DAVV University, Indore | Oct 2011
@@ -491,9 +573,11 @@
         <div class="section">
             <div class="section-title">Certifications</div>
             <div class="cert-item"><strong>Claude AI Certification</strong> | Anthropic | In Progress</div>
-            <div class="cert-item"><strong>Advanced AI and Machine Learning Techniques</strong> | Microsoft | Jul 2025</div>
+            <div class="cert-item"><strong>Advanced AI and Machine Learning Techniques</strong> | Microsoft | Jul 2025
+            </div>
             <div class="cert-item"><strong>Machine Learning Capstone</strong> | IBM | Jul 2025</div>
-            <div class="cert-item"><strong>Research Methodologies</strong> | Queen Mary University of London | Jul 2025</div>
+            <div class="cert-item"><strong>Research Methodologies</strong> | Queen Mary University of London | Jul 2025
+            </div>
         </div>
 
         <!-- Achievements -->
@@ -510,7 +594,8 @@
             <div class="achievement-group">
                 <div class="achievement-title">Engineering &amp; Delivery</div>
                 <ul class="achievement-list">
-                    <li>Won <strong>2nd Prize</strong> at Techment Hackathon CodeCompass for an <strong>MCP-based AI tooling solution</strong></li>
+                    <li>Won <strong>2nd Prize</strong> at Techment Hackathon CodeCompass for an <strong>MCP-based AI
+                            tooling solution</strong></li>
                     <li>Migrated legacy Android applications to modern Jetpack Compose architecture</li>
                     <li>Reduced bug reports by 40% through comprehensive automated testing</li>
                     <li>Delivered 15+ production applications across 8+ countries with multi-language support</li>
@@ -521,4 +606,5 @@
         <div class="footer-note">References available upon request</div>
     </div>
 </body>
+
 </html>
