@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Platform Features — Study Notes</title>
+<style>
+:root{
+  --navy:#14365c; --navy-lt:#26527f; --teal:#0f766e; --teal-lt:#14958a;
+  --ink:#1f2b38; --body:#33414f; --muted:#6b7684;
+  --rule:#e2e8ee; --bg:#f4f6f9; --surface:#ffffff;
+  --wash:#f2f8f7; --wash-br:#cfe4e1;
+  --amber:#8a6100; --amber-bg:#fdf6e6; --amber-br:#ecd9a8;
+  --rose:#8c2f39; --rose-bg:#fdf2f3; --rose-br:#eecdd1;
+  --code-bg:#12212f; --code-fg:#dfe8f0; --code-mut:#7f95aa;
+  --max:790px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --navy:#8fb8e8; --navy-lt:#a9caf0; --teal:#5fcfc2; --teal-lt:#7fdcd0;
+    --ink:#e8eef5; --body:#c2ceda; --muted:#8c9bab;
+    --rule:#2a3947; --bg:#0e1620; --surface:#16202c;
+    --wash:#14282a; --wash-br:#23484a;
+    --amber:#e8c37a; --amber-bg:#2a2314; --amber-br:#4e401f;
+    --rose:#eaa1aa; --rose-bg:#2b1619; --rose-br:#54282e;
+    --code-bg:#0a121b; --code-fg:#dfe8f0; --code-mut:#7f95aa;
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+  background:var(--bg); color:var(--body);
+  font-size:16px; line-height:1.68; -webkit-font-smoothing:antialiased;
+}
+.layout{display:flex; gap:44px; max-width:1180px; margin:0 auto; padding:40px 28px 80px}
+
+/* ---- Sidebar TOC ---- */
+.toc{width:232px; flex:0 0 232px; position:sticky; top:40px; align-self:flex-start; font-size:13.5px}
+.toc h2{
+  font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted); font-weight:700; margin-bottom:12px; padding-left:13px;
+}
+.toc a{
+  display:block; color:var(--muted); text-decoration:none;
+  padding:5px 0 5px 13px; border-left:2px solid var(--rule);
+  transition:color .15s, border-color .15s;
+}
+.toc a:hover{color:var(--navy)}
+.toc a.active{color:var(--navy); border-left-color:var(--teal); font-weight:600}
+
+/* ---- Article ---- */
+.article{flex:1; min-width:0; max-width:var(--max)}
+.card{
+  background:var(--surface); border-radius:10px; padding:52px 56px 60px;
+  box-shadow:0 1px 2px rgba(20,54,92,.06), 0 10px 34px rgba(20,54,92,.07);
+  border-top:3px solid var(--navy);
+}
+@media (prefers-color-scheme:dark){.card{box-shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.3)}}
+
+.eyebrow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px}
+.chip{
+  display:inline-block; background:var(--navy); color:#fff;
+  font-size:10.5px; font-weight:700; letter-spacing:.9px; text-transform:uppercase;
+  padding:3px 10px; border-radius:11px;
+}
+@media (prefers-color-scheme:dark){.chip{background:var(--navy); color:#0e1620}}
+.eyebrow .course{font-size:12.5px; color:var(--muted); letter-spacing:.2px}
+
+h1{
+  font-size:34px; line-height:1.2; color:var(--ink); font-weight:700;
+  letter-spacing:-.4px; margin-bottom:10px;
+}
+.lede{
+  font-size:17.5px; line-height:1.62; color:var(--body);
+  padding-bottom:26px; border-bottom:1px solid var(--rule); margin-bottom:34px;
+}
+
+h2{
+  font-size:22px; color:var(--navy); font-weight:700; letter-spacing:-.2px;
+  margin:46px 0 16px; padding-bottom:8px; border-bottom:1.5px solid var(--rule);
+  scroll-margin-top:28px;
+}
+h2::before{
+  content:''; display:inline-block; width:4px; height:17px; background:var(--teal);
+  margin-right:10px; vertical-align:-2px; border-radius:1px;
+}
+h3{font-size:17px; color:var(--ink); font-weight:700; margin:30px 0 10px; scroll-margin-top:28px}
+h4{
+  font-size:12px; color:var(--teal); font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; margin:24px 0 8px;
+}
+p{margin-bottom:14px}
+strong{color:var(--ink); font-weight:600}
+em{color:var(--body)}
+a{color:var(--navy); text-decoration:underline; text-underline-offset:2px}
+
+ul,ol{margin:0 0 16px 22px}
+li{margin-bottom:6px; padding-left:4px}
+li::marker{color:var(--teal)}
+ol li::marker{font-weight:700; font-size:14px}
+
+/* ---- Callouts ---- */
+blockquote{
+  background:var(--wash); border-left:3px solid var(--teal);
+  padding:15px 20px; margin:20px 0; border-radius:0 5px 5px 0;
+}
+blockquote p:last-child{margin-bottom:0}
+.note, .correction{
+  padding:15px 20px; margin:22px 0; border-radius:5px; font-size:14.5px;
+  border-left:3px solid;
+}
+.note{background:var(--amber-bg); border-color:var(--amber-br); border-left-color:var(--amber)}
+.correction{background:var(--rose-bg); border-color:var(--rose-br); border-left-color:var(--rose)}
+.note .tag, .correction .tag{
+  display:block; font-size:10.5px; font-weight:700; letter-spacing:1.1px;
+  text-transform:uppercase; margin-bottom:5px;
+}
+.note .tag{color:var(--amber)} .correction .tag{color:var(--rose)}
+.note p:last-child, .correction p:last-child{margin-bottom:0}
+
+/* ---- Tables ---- */
+table{width:100%; border-collapse:collapse; margin:20px 0; font-size:14.5px}
+th{
+  text-align:left; background:var(--wash); color:var(--navy);
+  font-size:11px; font-weight:700; letter-spacing:.9px; text-transform:uppercase;
+  padding:10px 14px; border-bottom:1.5px solid var(--wash-br);
+}
+td{padding:11px 14px; border-bottom:1px solid var(--rule); vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.key{font-weight:600; color:var(--navy); white-space:nowrap; width:1%}
+
+/* ---- Code ---- */
+pre{
+  background:var(--code-bg); color:var(--code-fg); padding:18px 20px;
+  border-radius:7px; overflow-x:auto; margin:18px 0;
+  font-size:13px; line-height:1.6;
+}
+pre code{font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace}
+code{
+  font-family:'SF Mono',Menlo,Consolas,monospace; font-size:.88em;
+  background:var(--wash); color:var(--teal);
+  padding:1.5px 5px; border-radius:3px; border:1px solid var(--wash-br);
+}
+pre code{background:none; color:inherit; padding:0; border:none; font-size:inherit}
+.pre-label{
+  display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted); margin:18px 0 -8px;
+}
+
+/* ---- Pipeline diagram ---- */
+.flow{
+  display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  background:var(--wash); border:1px solid var(--wash-br);
+  padding:18px; border-radius:7px; margin:20px 0;
+}
+.flow .step{
+  background:var(--surface); border:1px solid var(--wash-br); color:var(--navy);
+  font-size:12.5px; font-weight:600; padding:7px 13px; border-radius:5px; white-space:nowrap;
+}
+.flow .arrow{color:var(--teal); font-weight:700}
+.flow .step.final{background:var(--navy); color:#fff; border-color:var(--navy)}
+@media (prefers-color-scheme:dark){.flow .step.final{color:#0e1620}}
+
+/* ---- Vector figure ---- */
+.vec{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:20px 0;
+}
+.vec .item{border:1px solid var(--rule); border-radius:7px; padding:14px 16px; background:var(--surface)}
+.vec .label{font-size:11px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:var(--teal); margin-bottom:6px}
+.vec .val{font-family:'SF Mono',Menlo,Consolas,monospace; font-size:15px; color:var(--navy); font-weight:600}
+.vec .sub{font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.45}
+
+hr{border:none; border-top:1px solid var(--rule); margin:40px 0}
+.footer{margin-top:46px; padding-top:18px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--muted)}
+
+/* ---- Responsive ---- */
+@media (max-width:980px){
+  .layout{flex-direction:column; gap:0; padding:24px 18px 60px}
+  .toc{width:100%; flex:none; position:static; margin-bottom:26px;
+       background:var(--surface); border-radius:8px; padding:18px 20px;
+       box-shadow:0 1px 2px rgba(20,54,92,.06)}
+  .toc a{border-left:none; padding:4px 0}
+  .toc a.active{border-left:none}
+  .card{padding:32px 24px 40px; border-radius:8px}
+  h1{font-size:27px} .lede{font-size:16px}
+}
+
+/* ---- Print ---- */
+@page{size:A4; margin:16mm}
+@media print{
+  body{background:#fff; font-size:10.5pt; line-height:1.5; color:#000}
+  .layout{display:block; padding:0; max-width:100%}
+  .toc{display:none}
+  .card{box-shadow:none; border-top:none; padding:0; border-radius:0}
+  .article{max-width:100%}
+  h2,h3{page-break-after:avoid} pre,table,blockquote,.note,.correction,.flow{page-break-inside:avoid}
+  pre{background:#f4f6f8; color:#12212f; border:1px solid #d5dde5}
+  a{color:#000; text-decoration:none}
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+</style>
+<style>
+figure{margin:22px 0}
+figure img{width:100%; height:auto; display:block; border:1px solid var(--rule); border-radius:7px; background:#fff}
+figcaption{font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.5; text-align:center}
+.info{background:var(--wash); border-left:3px solid var(--teal); padding:15px 20px; margin:22px 0; border-radius:5px; font-size:14.5px}
+.info .tag{display:block; font-size:10.5px; font-weight:700; letter-spacing:1.1px; text-transform:uppercase; margin-bottom:5px; color:var(--teal)}
+.info p:last-child{margin-bottom:0}
+@media print{figure img{border:1px solid #d5dde5}}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <nav class="toc">
+    <h2>Contents</h2>
+    <a href="#thinking">Extended Thinking</a>
+    <a href="#vision">Image Support (Vision)</a>
+    <a href="#citations">Citations</a>
+    <a href="#caching">Prompt Caching</a>
+  </nav>
+
+  <main class="article">
+  <div class="card">
+
+    <div class="eyebrow">
+      <span class="chip">20 September 2026</span>
+      <span class="course">Study notes &mdash; Claude Certified Architect (Foundations), Anthropic Academy</span>
+    </div>
+
+    <h1>Claude Platform Features</h1>
+
+    <p class="lede">Four capabilities that shape how you architect a Claude application: <strong>extended thinking</strong> for hard reasoning, <strong>vision</strong> for image analysis, <strong>citations</strong> for verifiable answers, and <strong>prompt caching</strong> for speed and cost.</p>
+
+    <!-- ============ EXTENDED THINKING ============ -->
+    <h2 id="thinking">Extended Thinking</h2>
+    <p>Extended thinking is Claude's advanced reasoning feature that gives the model time to think through complex problems before generating a response. When enabled, Claude produces a thinking process that can be surfaced to help you understand how the model approached the query.</p>
+    <p>This feature significantly improves Claude's ability to handle complex tasks with greater accuracy, but it comes with <strong>important trade-offs</strong>. You'll be charged for all tokens generated during the thinking phase, and the additional processing time increases response latency. The key is knowing when the improved intelligence justifies the extra cost and wait time.</p>
+
+    <div class="note">
+      <span class="tag">2026 update &mdash; the API has moved on</span>
+      <p><strong>Configuration.</strong> Current models use <code>thinking: {type: "adaptive"}</code> &mdash; Claude decides when and how deeply to think. The old fixed <code>budget_tokens</code> setting is <strong>rejected with a 400</strong> on Opus 5, Opus 4.7/4.8, Sonnet 5 and Fable 5. Depth is now controlled with <code>output_config: {effort: "low"&hellip;"max"}</code>.</p>
+      <p><strong>Visibility.</strong> The raw chain of thought is <strong>never returned</strong>. On current models <code>display</code> defaults to <code>"omitted"</code> (thinking blocks arrive with empty text); set <code>display: "summarized"</code> for a readable summary. So "a visible thinking process users can examine" no longer holds literally.</p>
+    </div>
+
+    <h3>When to Use Extended Thinking</h3>
+    <p>The decision to enable extended thinking should be driven by your <strong>prompt evaluations</strong>. The recommended approach:</p>
+    <ol>
+      <li>Write and test your prompt <strong>without</strong> extended thinking first</li>
+      <li>Run evaluations to measure accuracy</li>
+      <li>If results aren't meeting your standards after prompt optimization efforts&hellip;</li>
+      <li>&hellip;<strong>then</strong> consider enabling extended thinking as a solution</li>
+    </ol>
+
+    <h3>How Extended Thinking Changes Responses</h3>
+    <p><strong>Without extended thinking</strong>, Claude's response flow is straightforward &mdash; you send a user message with a text block and receive an assistant message with a text block in return.</p>
+
+    <figure>
+      <img src="without_thinking.png" alt="Sequence diagram: our server sends a user message containing one text block to Claude; Claude returns an assistant message containing a single text block.">
+      <figcaption>Without thinking &mdash; one text block out, one text block back.</figcaption>
+    </figure>
+
+    <p><strong>With extended thinking enabled</strong>, the response structure changes. The assistant message now contains <strong>two distinct blocks</strong> &mdash; a thinking block followed by the text block:</p>
+
+    <figure>
+      <img src="withThinking.png" alt="Sequence diagram: the same user message goes to Claude, but the assistant message now returns a thinking block followed by a text block.">
+      <figcaption>With thinking &mdash; the assistant message carries a thinking block ahead of the text block.</figcaption>
+    </figure>
+
+    <table>
+      <thead><tr><th></th><th>Assistant message contains</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Without thinking</td><td><code>text</code> block</td></tr>
+        <tr><td class="key">With thinking</td><td><code>thinking</code> block <strong>+</strong> <code>text</code> block</td></tr>
+      </tbody>
+    </table>
+
+    <h3>The Signature System</h3>
+    <p>Each thinking block includes a <strong>cryptographic signature</strong> that serves an important security purpose. This signature ensures that the thinking text hasn't been modified when you include the message in future conversation turns.</p>
+    <p>Claude relies heavily on the thinking content for response generation, so preventing tampering is crucial for maintaining safe and consistent behavior. <strong>If you modify the thinking text, the signature validation will fail.</strong></p>
+    <blockquote><p><strong>Practical rule:</strong> echo thinking blocks back <strong>unchanged</strong> when continuing a conversation on the same model.</p></blockquote>
+
+    <!-- ============ VISION ============ -->
+    <h2 id="vision">Image Support (Vision)</h2>
+    <p>Claude's vision capabilities let you include images in your messages and ask Claude to analyze them in sophisticated ways. You can ask Claude to describe image contents, compare multiple images, count objects, or perform complex visual analysis tasks.</p>
+
+    <h3>Limits to Know</h3>
+    <table>
+      <thead><tr><th>Limit</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td class="key">Images per request</td><td>Up to <strong>100</strong> across all messages</td></tr>
+        <tr><td class="key">Max size per image</td><td><strong>5 MB</strong></td></tr>
+        <tr><td class="key">Max dimension &mdash; single image</td><td><strong>8000 px</strong> height/width</td></tr>
+        <tr><td class="key">Max dimension &mdash; multiple images</td><td><strong>2000 px</strong> height/width</td></tr>
+        <tr><td class="key">Accepted formats</td><td>Base64 encoding <strong>or</strong> a URL to the image</td></tr>
+        <tr><td class="key">Token cost</td><td><code>tokens = (width px &times; height px) / 750</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Prompting Techniques</h3>
+    <p>The most important thing to understand about Claude's vision capabilities is that <strong>good prompting techniques are absolutely critical</strong>. Simple prompts often produce poor results, even with clear images.</p>
+    <p>For example, asking <em>"How many marbles are in this image?"</em> with an image containing 12 marbles might return an incorrect count of 13. You can dramatically improve accuracy by applying the same prompt engineering techniques you'd use for text:</p>
+    <ul>
+      <li>Providing detailed guidelines and analysis steps</li>
+      <li>Using one-shot or multi-shot examples</li>
+      <li>Breaking down complex tasks into smaller steps</li>
+    </ul>
+    <p>Instead of a simple question, provide Claude with a <strong>methodology</strong>:</p>
+
+    <span class="pre-label">Prompt</span>
+<pre><code>Analyze this image of marbles and determine the exact count using this methodology:
+1. Begin by identifying each unique marble one at a time. Assign each a number as
+   you identify it.
+2. Verify your result by counting with a different method. Start from the
+   bottom-left corner and work row by row, from left to right.
+
+What is the exact, verified number of marbles in this image?</code></pre>
+
+    <h3>Real-World Examples</h3>
+    <ol>
+      <li><strong>Fire risk assessments</strong></li>
+      <li><strong>Design-to-mobile-layout conversion</strong></li>
+    </ol>
+
+    <!-- ============ CITATIONS ============ -->
+    <h2 id="citations">Citations</h2>
+    <p>When Claude answers questions based on documents you provide, users might assume it's just pulling information from its training data. But what if Claude is actually citing specific sources? The <strong>citations</strong> feature lets you show users exactly where Claude found its information, building trust and transparency into your AI applications.</p>
+
+    <h3>Why Citations Matter</h3>
+    <p>Without citations, users see Claude's responses as coming from memory. They have no way to verify the information or understand that it's based on specific documents you provided. Citations solve this by showing users the <strong>exact source material</strong> Claude used to generate each part of its response.</p>
+
+    <h3>Citation Structure</h3>
+    <p>Each citation contains:</p>
+    <table>
+      <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="key"><code>cited_text</code></td><td>The exact text Claude is referencing from your document</td></tr>
+        <tr><td class="key"><code>document_index</code></td><td>Which document (if you provided multiple)</td></tr>
+        <tr><td class="key"><code>document_title</code></td><td>The title you assigned to the document</td></tr>
+        <tr><td class="key"><code>start_page_number</code></td><td>Where the cited text begins</td></tr>
+        <tr><td class="key"><code>end_page_number</code></td><td>Where the cited text ends</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info">
+      <span class="tag">Note on location fields</span>
+      <p><code>start_page_number</code> / <code>end_page_number</code> are the <strong>PDF</strong> form (<code>page_location</code>). Plain-text documents instead return <code>char_location</code> with <code>start_char_index</code> / <code>end_char_index</code>, and custom content returns <code>content_block_location</code>. Branch on the citation's <code>type</code> rather than assuming page numbers are always present. Citations are also <strong>incompatible with <code>output_config.format</code></strong> &mdash; combining them returns a 400.</p>
+    </div>
+
+    <h3>When to Use Citations</h3>
+    <p>Citations are essential when:</p>
+    <ul>
+      <li>Users need to <strong>verify information accuracy</strong></li>
+      <li>You're working with <strong>sensitive or important documents</strong></li>
+      <li><strong>Transparency</strong> about sources builds trust in your application</li>
+      <li>Users might want to read the <strong>original source material</strong></li>
+    </ul>
+    <blockquote><p>By implementing citations, you transform Claude from a "black box" that gives answers into a transparent system that <strong>shows its work</strong> &mdash; making your AI applications more trustworthy and verifiable.</p></blockquote>
+
+    <!-- ============ PROMPT CACHING ============ -->
+    <h2 id="caching">Prompt Caching</h2>
+    <p>Prompt caching is a feature that <strong>speeds up Claude's responses and reduces the cost</strong> of text generation by reusing computational work from previous requests. Instead of throwing away all the processing work after each request, Claude can save and reuse it when you send similar content again.</p>
+
+    <h3>How Claude Normally Processes Requests</h3>
+    <p>When you send a message to Claude, it doesn't immediately start generating a response. Instead, Claude performs extensive preprocessing work on your input:</p>
+    <ol>
+      <li><strong>Tokenizes</strong> the prompt (breaks text into smaller units)</li>
+      <li>Creates <strong>embeddings</strong> for each token (mathematical representations)</li>
+      <li>Adds <strong>context</strong> based on surrounding text</li>
+      <li><strong>Only then</strong> generates the actual output text</li>
+    </ol>
+    <p>After sending you the response, Claude <strong>discards all this computational work</strong>. Everything gets thrown away, and Claude declares itself ready for the next request.</p>
+
+    <h3>The Problem with Repeated Content</h3>
+    <p>Here's where things get inefficient. Imagine you're having a conversation with Claude, so your follow-up request includes:</p>
+    <ul>
+      <li>The same original user message from before</li>
+      <li>Claude's previous response</li>
+      <li>Your new follow-up message</li>
+    </ul>
+    <p>Claude has to reprocess that original message all over again, even though it just analyzed the exact same content moments earlier.</p>
+    <blockquote><p><em>"I just processed that message and threw away all the work I did. I could have reused it!"</em></p></blockquote>
+
+    <h3>How Prompt Caching Solves This</h3>
+    <p>Prompt caching changes this wasteful process. Instead of discarding the preprocessing work, Claude saves it in a <strong>cache</strong>.</p>
+    <ol>
+      <li><strong>Initial request</strong> &mdash; Claude processes your message and <strong>writes</strong> the computational work to a cache</li>
+      <li><strong>Follow-up requests</strong> &mdash; when Claude sees the same content again, it <strong>reads</strong> the previously processed work from the cache instead of starting over</li>
+    </ol>
+    <p>The cache acts like a lookup table: <em>"If I ever see this message again, I'll reuse this work I already did."</em></p>
+
+    <div class="flow">
+      <span class="step">Request 1</span><span class="arrow">&rarr;</span>
+      <span class="step">Process</span><span class="arrow">&rarr;</span>
+      <span class="step">WRITE to cache</span><span class="arrow">&rarr;</span>
+      <span class="step final">Respond</span>
+    </div>
+    <div class="flow">
+      <span class="step">Request 2</span><span class="arrow">&rarr;</span>
+      <span class="step">READ from cache</span><span class="arrow">&rarr;</span>
+      <span class="step final">Respond &mdash; faster, cheaper</span>
+    </div>
+
+    <h3>Key Benefits and Limitations</h3>
+    <table>
+      <thead><tr><th>Benefits</th><th>Limitations</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Faster responses</strong> &mdash; cached requests execute more quickly</td><td><strong>Short lifespan</strong> &mdash; the cache lives for 5 minutes</td></tr>
+        <tr><td><strong>Lower costs</strong> &mdash; you pay less for processing that reuses cached work</td><td><strong>Exact matches required</strong> &mdash; only useful when repeatedly sending the same content</td></tr>
+        <tr><td><strong>Automatic optimization</strong> &mdash; initial request writes, follow-ups read</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+    <p>Prompt caching is particularly valuable for applications where users frequently reference the same documents, continue conversations, or iterate on similar prompts within a short timeframe. This happens <strong>extremely frequently</strong> in conversational applications and document analysis workflows.</p>
+
+    <h3>Cache Breakpoints</h3>
+    <p>Work done on messages is <strong>not cached automatically</strong>. You have to manually add a <strong>cache breakpoint</strong> to a block.</p>
+    <ul>
+      <li>Work done for everything <strong>before</strong> the breakpoint will be cached</li>
+      <li>The cache is only used on follow-up requests if the content <strong>up to and including</strong> the breakpoint is <strong>identical</strong></li>
+    </ul>
+    <p>Cache breakpoints span messages and can cache assistant messages too. When you place a breakpoint, everything up to that point gets cached. <strong>Remember: content must be identical to use the cache.</strong></p>
+
+    <h3>Breakpoint Location</h3>
+    <p>You're <strong>not restricted to text blocks</strong>. You can add cache breakpoints to:</p>
+    <ul>
+      <li><strong>System prompts</strong></li>
+      <li><strong>Tool definitions</strong></li>
+    </ul>
+    <p>These are actually the most common caching opportunities, since they rarely change between requests.</p>
+
+    <h3>Cache Ordering</h3>
+    <p>You can add up to <strong>four cache breakpoints</strong> total. If you place a breakpoint on your last tool, everything up to that tool gets cached &mdash; but the system prompt and messages won't be. This gives you fine-grained control over what gets cached based on what changes in your application.</p>
+
+    <h3>Minimum Content Length</h3>
+    <p>Content must be at least <strong>1024 tokens</strong> long to be cached (the sum of all messages/blocks you're trying to cache). A simple "Hi there!" message won't meet this threshold &mdash; but if you duplicate that text 500 times, you'll have enough tokens to cache.</p>
+
+    <div class="info">
+      <span class="tag">Two refinements worth knowing</span>
+      <p>The <strong>1024-token minimum is model-dependent</strong> &mdash; it ranges from roughly 512 to 4096 tokens depending on the model, and a prefix below the threshold silently fails to cache rather than erroring. The <strong>5-minute TTL is the default</strong>, but a longer 1-hour cache option is available. Verify caching actually happened by checking <code>usage.cache_read_input_tokens</code> &mdash; if it's zero across repeated requests, something in your prefix is changing between calls.</p>
+    </div>
+
+    <blockquote><p><strong>The key to effective prompt caching</strong> is identifying the parts of your requests that stay consistent &mdash; usually your <strong>system prompts and tool definitions</strong> &mdash; and placing breakpoints strategically to maximize cache hits while minimizing reprocessing.</p></blockquote>
+
+    <div class="footer">
+      Study notes &mdash; Claude Certified Architect (Foundations), Anthropic Academy &middot; 20 September 2026
+    </div>
+
+  </div>
+  </main>
+</div>
+
+<script>
+// Scroll-spy: highlight the current section in the sidebar
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var targets = links
+    .map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); })
+    .filter(Boolean);
+  if (!targets.length || !('IntersectionObserver' in window)) return;
+
+  var visible = new Set();
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { visible.add(e.target.id); } else { visible.delete(e.target.id); }
+    });
+    for (var i = 0; i < targets.length; i++) {
+      if (visible.has(targets[i].id)) {
+        links.forEach(function (a) { a.classList.remove('active'); });
+        links[i].classList.add('active');
+        break;
+      }
+    }
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+
+  targets.forEach(function (t) { observer.observe(t); });
+})();
+</script>
+</body>
+</html>
