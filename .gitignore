@@ -1,0 +1,78 @@
+# ---------------------------------------------------------------
+# Secrets & environment files  — never commit these
+# ---------------------------------------------------------------
+.env
+.env.*
+*.env
+!.env.example
+!.env.template
+!.env.sample
+
+# Credentials / keys
+*.pem
+*.key
+*.p12
+*.pfx
+credentials
+credentials.json
+secrets.json
+service-account*.json
+aws-credentials*
+*.csv.credentials
+
+# ---------------------------------------------------------------
+# macOS
+# ---------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# ---------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# ---------------------------------------------------------------
+# Node
+# ---------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ---------------------------------------------------------------
+# Editors / IDEs
+# ---------------------------------------------------------------
+.vscode/
+*.swp
+*.swo
+*~
+# Note: .idea/ is managed by JetBrains' own .idea/.gitignore (already tracked)
+
+# ---------------------------------------------------------------
+# Build / temp output
+# ---------------------------------------------------------------
+dist/
+build/
+*.log
+*.tmp
+.cache/

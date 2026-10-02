@@ -1,6 +1,6 @@
 # RAJENDRA VERMA
 
-**AI/ML Solutions Architect | Sr. Technology Consultant**
+**Solution Architect | AI/ML & Cloud | Sr. Technology Consultant**
 
 📧 rajendrarajaramv@gmail.com | 📱 700-0201-326 | 🔗 [LinkedIn](linkedin.com/in/rajendrarajaramv) | 💻 [GitHub](iamrajendraverma.github.io)
 
@@ -16,10 +16,14 @@ Strategic AI/ML Solutions Architect with **10+ years** of full-stack engineering
 
 **Languages:** Kotlin, Java, Dart (Flutter), Python, C++  
 **Mobile Frameworks:** Jetpack Compose, Kotlin Multiplatform (KMP), Android SDK, Android NDK, Flutter  
-**Architecture & Patterns:** MVVM, MVP, Clean Architecture, Spec-Driven Development  
-**Backend & Cloud:** Flask, FastAPI, AWS Lambda, Google Cloud Platform, Firebase, AWS  
-**Databases:** SQLite, Room, Realm  
-**APIs & Networking:** RESTful, WebRTC, MQTT, Ktor, Retrofit  
+**Solution Architecture:** Solution & application architecture, API-first design, enterprise integration patterns, technical design documents (system diagrams, data flow, API specifications), build-vs-buy evaluation, framework selection  
+**Architecture & Patterns:** MVVM, MVP, Clean Architecture, Spec-Driven Development, client–server contract design  
+**AWS:** Lambda, EC2, ECS, Elastic Beanstalk, API Gateway, S3, DynamoDB, RDS, SNS, SQS, IAM (users/roles/policies, scoped credentials), CloudFront, CloudWatch, CodePipeline, AWS IoT Core, Service Quotas, Billing & Cost Management  
+**AWS AI/ML:** Amazon Bedrock — Converse & InvokeModel APIs, cross-region inference profiles, model access governance, boto3 integration  
+**Other Cloud & Backend:** Google Cloud Platform, Vertex AI, Firebase (Auth, Firestore, Realtime DB, Cloud Messaging), Flask, FastAPI, serverless architectures  
+**Security & Performance:** HIPAA-compliant data handling, IAM & access-scoped credentials, secure BLE protocols, performance profiling and optimisation  
+**Databases:** SQL & NoSQL, SQLite, Room, Realm, Firebase Realtime DB, data modelling  
+**APIs & Networking:** RESTful, API specification & versioning, WebRTC, MQTT, Ktor, Retrofit, third-party & payment gateway integration  
 **AI & Development Tools:** Claude AI (1+ year, code generation, debugging, architecture design, documentation), GitHub Copilot, Cursor, OpenAI Whisper API, TensorFlow, Vosk  
 **Testing & Quality:** JUnit, Espresso, CI/CD, Agile/Scrum Methodologies  
 **IoT & Hardware:** ESP8266, ESP32-C3, Bluetooth 6.0 (BLE), Zigbee, LoRa, Matter Protocol, Arduino  
@@ -138,13 +142,62 @@ Strategic AI/ML Solutions Architect with **10+ years** of full-stack engineering
 - Implemented binary, delay, and interval switching modes for advanced automation scenarios
 - **Tech Stack:** Jetpack Compose, MQTT (paho), Ktor, Hilt DI, IoT Protocols
 
+### E-Commerce Marketplace | Multi-Vendor Retail Platform
+
+*Multi-vendor online marketplace with integrated payments and order management*
+
+- Architected a **multi-vendor marketplace** supporting independent seller catalogues, product listings, and order flows on a shared platform
+- Integrated **multiple payment gateways** with secure transaction handling and order-state reconciliation
+- Designed the **REST API integration layer** between the mobile client and backend commerce services
+- Implemented catalogue browsing, cart, and checkout journeys with attention to performance on low-bandwidth networks
+- **Tech Stack:** Android, REST APIs, Payment Gateway SDKs, Firebase, SQLite
+- **Domain relevance:** eCommerce platforms, omnichannel commerce, order management
+
+### Taxi Aggregation Platform | Real-Time Marketplace & Dispatch
+
+*GPS-enabled ride-hailing platform with live tracking and driver–rider matching*
+
+- Built a **two-sided marketplace** (rider and driver applications) with real-time dispatch and supply–demand matching
+- Implemented **GPS tracking and live location streaming** for in-flight order visibility
+- Integrated **payment processing** and fare computation with trip lifecycle state management
+- Handled real-time messaging and push notification flows across both app surfaces
+- **Tech Stack:** Android, GPS/Location Services, Real-Time Messaging, Payment Integration, Google Maps SDK
+- **Domain relevance:** real-time inventory/supply matching, store-to-customer fulfilment, logistics visibility
+
+### Risco Group NVR/DVR Surveillance Platform | Store & Site Operations
+
+*Real-time video surveillance platform with cloud integration for multi-site monitoring*
+
+- Integrated **NVR and DVR camera SDKs** for live and recorded video streaming across distributed sites
+- Implemented **real-time video streaming** with cloud connectivity for remote multi-site monitoring
+- Designed device pairing and stream-management workflows for non-technical operators
+- **Tech Stack:** Android, NVR/DVR SDKs, Real-Time Video Streaming, Cloud Integration, IoT
+- **Domain relevance:** store operations, loss prevention, multi-site estate monitoring
+
+### LMS Platform (Intellizy) | Content Delivery at Scale
+
+*Online education platform with video streaming and personalised engagement*
+
+- Built an **HTML- and video-based content delivery platform** with streaming playback
+- Implemented a **personalised push notification system** driving learner re-engagement
+- Designed offline-capable content access and progress synchronisation
+- **Tech Stack:** Android, Video Streaming, Push Notifications, REST APIs
+- **Domain relevance:** customer engagement, personalised campaigns, loyalty communications
+
+### Chat Application (Bizztalk) | Real-Time Communication Platform
+
+*WhatsApp-comparable messaging platform with voice and video calling*
+
+- Built a **real-time messaging platform** with one-to-one and group conversation support
+- Implemented **WebRTC audio and video calling**, including signalling and media negotiation
+- Architected message delivery, presence, and synchronisation across devices
+- **Tech Stack:** Android, WebRTC, Real-Time Messaging, Firebase
+- **Domain relevance:** customer service channels, in-app engagement
+
 ### Additional Notable Projects
 
-- **Risco Group NVR/DVR Camera App** – Real-time video surveillance with cloud integration
-- **Taxi Aggregation Platform** – GPS-enabled ride-hailing application with real-time tracking
-- **E-Commerce Marketplace** – Multi-vendor platform with payment integration
-- **LMS Platform (Intellizy)** – Online education system with personalized push notifications
-- **Chat Application (Bizztalk)** – Messaging app with WebRTC audio/video calling
+- **BenchPrep multi-flavour delivery** – Single codebase serving multiple client-branded builds
+- **Glucometer & medical device integration** – BLE pairing and secure data capture for healthcare clients
 
 ---
 

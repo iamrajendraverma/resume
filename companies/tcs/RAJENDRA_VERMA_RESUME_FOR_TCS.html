@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rajendra Verma - Solution Architect</title>
+<style>
+        /* ---- Theme tokens ------------------------------------------------ */
+        :root {
+            --navy: #14365c;
+            /* primary  - headings, names, rules      */
+            --teal: #0f766e;
+            /* accent   - companies, tech, markers    */
+            --ink: #24303d;
+            /* body copy                              */
+            --muted: #6b7480;
+            /* dates, secondary text                  */
+            --rule: #d9e0e8;
+            /* hairlines                              */
+            --wash: #f3f7f7;
+            /* chip background                        */
+            --wash-br: #d8e6e4;
+            /* chip border                            */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 9px;
+            line-height: 1.38;
+            color: var(--ink);
+            background-color: #e9edf1;
+            padding: 24px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 8.5in;
+            background-color: #fff;
+            margin: 0 auto;
+            padding: 0.5in 0.55in;
+            box-shadow: 0 1px 3px rgba(20, 54, 92, .10), 0 8px 28px rgba(20, 54, 92, .10);
+            border-top: 3px solid var(--navy);
+        }
+
+        /* ---- Header ------------------------------------------------------ */
+        .header {
+            padding-bottom: 9px;
+            margin-bottom: 13px;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .name {
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 2.2px;
+            line-height: 1.1;
+        }
+
+        .title {
+            font-size: 10.5px;
+            color: var(--teal);
+            font-weight: 600;
+            letter-spacing: 1.1px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .contact-info {
+            font-size: 8.5px;
+            color: var(--muted);
+            margin-top: 7px;
+            letter-spacing: .2px;
+        }
+
+        .contact-info a {
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .contact-info .sep {
+            color: var(--rule);
+            margin: 0 6px;
+        }
+
+        /* ---- Sections ---------------------------------------------------- */
+        .section {
+            margin-bottom: 11px;
+        }
+
+        .section-title {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            padding-bottom: 3px;
+            margin-bottom: 7px;
+            border-bottom: 1.5px solid var(--navy);
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 8px;
+            background: var(--teal);
+            margin-right: 6px;
+            vertical-align: -1px;
+        }
+
+        /* ---- Summary ----------------------------------------------------- */
+        .summary {
+            line-height: 1.5;
+            color: var(--ink);
+            text-align: justify;
+        }
+
+        .summary strong {
+            color: var(--navy);
+        }
+
+        /* ---- Skill / expertise rows -------------------------------------- */
+        .skill-row {
+            display: grid;
+            grid-template-columns: 112px 1fr;
+            gap: 10px;
+            padding: 2.5px 0;
+            border-bottom: 1px dotted var(--rule);
+        }
+
+        .skill-row:last-child {
+            border-bottom: none;
+        }
+
+        .skill-label {
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: .2px;
+        }
+
+        .skill-value {
+            color: var(--ink);
+        }
+
+        /* ---- Experience -------------------------------------------------- */
+        .job {
+            margin-bottom: 8px;
+        }
+
+        .job:last-child {
+            margin-bottom: 0;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .job-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: .2px;
+        }
+
+        .job-date {
+            font-size: 8.5px;
+            color: var(--muted);
+            white-space: nowrap;
+            letter-spacing: .3px;
+        }
+
+        .job-company {
+            font-size: 9px;
+            color: var(--teal);
+            font-weight: 600;
+            margin: 1px 0 3px;
+        }
+
+        /* ---- Shared bullet styling --------------------------------------- */
+        .bullets,
+        .project-bullets,
+        .achievement-list {
+            color: var(--ink);
+            margin-left: 13px;
+            padding-left: 0;
+            list-style: disc outside;
+        }
+
+        .bullets li,
+        .project-bullets li,
+        .achievement-list li {
+            margin-bottom: 1.5px;
+            padding-left: 2px;
+        }
+
+        .bullets li::marker,
+        .project-bullets li::marker,
+        .achievement-list li::marker {
+            color: var(--teal);
+            font-size: 8px;
+        }
+
+        .bullets strong,
+        .project-bullets strong,
+        .achievement-list strong {
+            color: var(--navy);
+        }
+
+        /* ---- Projects ---------------------------------------------------- */
+        .project {
+            margin-bottom: 8px;
+        }
+
+        .project:last-child {
+            margin-bottom: 0;
+        }
+
+        .project-title {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: .2px;
+        }
+
+        .project-desc {
+            font-size: 8.5px;
+            color: var(--muted);
+            font-style: italic;
+            margin: 1px 0 2px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--navy);
+            color: #fff;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+            padding: 1.5px 6px;
+            border-radius: 9px;
+            margin-left: 5px;
+            vertical-align: 1px;
+        }
+
+        .tech-stack {
+            display: inline-block;
+            font-size: 8px;
+            color: var(--teal);
+            font-weight: 600;
+            background: var(--wash);
+            border: 1px solid var(--wash-br);
+            border-radius: 3px;
+            padding: 2px 7px;
+            margin: 3px 0 0 13px;
+            letter-spacing: .2px;
+        }
+
+        .tech-stack a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        /* ---- Education / Certifications ---------------------------------- */
+        .edu-item,
+        .cert-item {
+            padding: 2.5px 0;
+            border-bottom: 1px dotted var(--rule);
+        }
+
+        .edu-item:last-child,
+        .cert-item:last-child {
+            border-bottom: none;
+        }
+
+        .edu-degree,
+        .cert-item strong {
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        /* ---- Achievements ------------------------------------------------ */
+        .achievement-group {
+            margin-bottom: 6px;
+        }
+
+        .achievement-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: .3px;
+            margin-bottom: 2px;
+        }
+
+        .footer-note {
+            font-size: 8px;
+            color: #9aa3ad;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 7px;
+            border-top: 1px solid var(--rule);
+        }
+
+        /* ---- Print ------------------------------------------------------- */
+        @page {
+            size: Letter;
+            margin: 0.45in;
+        }
+
+        @media print {
+
+            html,
+            body {
+                background: #fff;
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border-top: none;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            .job,
+            .project,
+            .achievement-group {
+                page-break-inside: avoid;
+            }
+
+            .section-title {
+                page-break-after: avoid;
+            }
+
+            a {
+                color: var(--navy);
+                text-decoration: none;
+            }
+        }
+    </style></head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="name">RAJENDRA VERMA</h1>
+            <div class="title">Solution Architect &nbsp;|&nbsp; Java &middot; Python &middot; AWS &nbsp;|&nbsp; Sr. Technology Consultant</div>
+            <div class="contact-info">
+                <a href="mailto:rajendrarajaramv@gmail.com">rajendrarajaramv@gmail.com</a>
+                <span class="sep">|</span> +91 700-0201-326
+                <span class="sep">|</span> <a href="https://linkedin.com/in/rajendrarajaramv">linkedin.com/in/rajendrarajaramv</a>
+                <span class="sep">|</span> <a href="https://iamrajendraverma.github.io">iamrajendraverma.github.io</a>
+                <span class="sep">|</span> Indore, India
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="section">
+            <div class="section-title">Professional Summary</div>
+            <div class="summary">
+                Solution Architect and Sr. Technology Consultant with <strong>10+ years</strong> of full-stack
+                engineering experience designing and delivering scalable, secure production systems across
+                <strong>e-commerce, healthcare, fintech and SaaS</strong>. Experienced in end-to-end solution and
+                application architecture — API-first design, enterprise integration patterns, technical design
+                documentation, and framework and build-vs-buy evaluation. Hands-on across <strong>Java, Kotlin and
+                Python</strong>, with breadth on <strong>AWS</strong> — Lambda, EC2, ECS, API Gateway, S3, DynamoDB,
+                IAM, CloudWatch and Amazon Bedrock — partnering with enterprise clients to assess systems, recommend
+                stacks and oversee implementation. Delivers in <strong>Agile/Scrum</strong> environments and mentors
+                engineering teams.
+            </div>
+        </div>
+
+        <!-- Alignment -->
+        <div class="section">
+            <div class="section-title">Alignment with the Role</div>
+            <div class="skill-row">
+                <div class="skill-label">6+ Years Experience</div>
+                <div class="skill-value">10+ years — first role July 2016; 5+ years at Techment</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Java / Python / AWS</div>
+                <div class="skill-value">Java &amp; Kotlin (JVM) across 40+ production applications; Python with Flask and FastAPI; AWS across Lambda, EC2, ECS, API Gateway, S3, DynamoDB, IAM, CloudWatch and Amazon Bedrock</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Solution Architecture</div>
+                <div class="skill-value">End-to-end solution design; multi-flavor and Kotlin Multiplatform architectures; MCP client–server contract design</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">API &amp; Integration</div>
+                <div class="skill-value">REST API design and integration; payment gateways, NVR/DVR SDKs, WebRTC, MQTT, third-party SDKs</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Security</div>
+                <div class="skill-value">HIPAA-compliant data handling; secure BLE protocols; IAM and access-scoped cloud credentials</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Performance</div>
+                <div class="skill-value">Legacy modernization with measured performance gains; 40% reduction in defects through automated testing</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Retail / eCommerce</div>
+                <div class="skill-value">Multi-vendor eCommerce marketplace with payment integration; two-sided ride-hailing marketplace; multi-site store surveillance</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Agile / Scrum</div>
+                <div class="skill-value">Facilitates agile ceremonies, sprint planning, estimation and code review</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Stakeholders</div>
+                <div class="skill-value">Enterprise client consulting — opportunity assessment, stack recommendation, delivery oversight</div>
+            </div>
+        </div>
+
+        <!-- Technical Skills -->
+        <div class="section">
+            <div class="section-title">Core Technical Skills</div>
+            <div class="skill-row">
+                <div class="skill-label">Architecture</div>
+                <div class="skill-value">Solution &amp; application architecture, API-first design, enterprise integration patterns, technical design documents, build-vs-buy evaluation</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Languages</div>
+                <div class="skill-value">Java, Kotlin, Python, Dart (Flutter), C++</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">AWS Compute</div>
+                <div class="skill-value">Lambda, EC2, ECS, Elastic Beanstalk, serverless architectures</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">AWS Data &amp; API</div>
+                <div class="skill-value">API Gateway, S3, DynamoDB, RDS, SNS, SQS, CloudFront</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">AWS AI &amp; Ops</div>
+                <div class="skill-value">Amazon Bedrock (Converse &amp; InvokeModel APIs, cross-region inference profiles), IAM, CloudWatch, CodePipeline, AWS IoT Core</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Other Cloud</div>
+                <div class="skill-value">Google Cloud Platform, Vertex AI, Firebase, Flask, FastAPI</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">APIs</div>
+                <div class="skill-value">RESTful design &amp; versioning, payment gateway integration, WebRTC, MQTT, Ktor, Retrofit</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Data</div>
+                <div class="skill-value">SQL &amp; NoSQL, data modeling, SQLite, Room, Realm, Firebase Realtime DB</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">AI &amp; LLMs</div>
+                <div class="skill-value">Claude API, Amazon Bedrock, OpenAI, RAG pipelines, Model Context Protocol (MCP), prompt engineering</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Patterns</div>
+                <div class="skill-value">Clean Architecture, MVVM, MVP, client–server contract design, spec-driven development</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Delivery</div>
+                <div class="skill-value">Agile/Scrum, CI/CD, Git &amp; GitHub, JUnit, Espresso, code review, mentoring</div>
+            </div>
+            <div class="skill-row">
+                <div class="skill-label">Mobile &amp; IoT</div>
+                <div class="skill-value">Jetpack Compose, KMP, Android SDK/NDK, Flutter, BLE 6.0, ESP32-C3, Matter Protocol</div>
+            </div>
+        </div>
+
+        <!-- Experience -->
+        <div class="section">
+            <div class="section-title">Professional Experience</div>
+
+            <div class="job">
+                <div class="job-header">
+                    <span class="job-title">Sr. Technology Consultant &amp; AI/ML Solutions Architect</span>
+                    <span class="job-date">Apr 2025 – Present</span>
+                </div>
+                <div class="job-company">Techment, Indore, India</div>
+                <ul class="bullets">
+                    <li><strong>Solution architecture</strong> — Design enterprise AI/ML solutions; evaluate platforms and recommend integration patterns aligned to client requirements and budget</li>
+                    <li><strong>Client consulting</strong> — Partner with enterprise clients to assess tech stacks, identify opportunities and architect end-to-end implementations against business objectives</li>
+                    <li><strong>Cloud &amp; LLM integration</strong> — Architect RAG systems and multi-model workflows; assess capability, cost and latency trade-offs across Claude, GPT and open-source models</li>
+                    <li><strong>Technical leadership</strong> — Facilitate agile ceremonies, mentor developers, lead code reviews and unblock complex engineering challenges</li>
+                    <li><strong>Modernization</strong> — Lead application modernization using Jetpack Compose and cross-platform KMP architecture</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <span class="job-title">Technology Consultant</span>
+                    <span class="job-date">Apr 2023 – Apr 2025</span>
+                </div>
+                <div class="job-company">Techment, Indore, India</div>
+                <ul class="bullets">
+                    <li>Conducted <strong>technical assessments</strong> of client systems; recommended solutions across cloud services, hardware and software architecture</li>
+                    <li>Delivered production-grade applications for multinational clients; architected solutions with Jetpack Compose and LiveData</li>
+                    <li>Revamped legacy applications with measurable performance and user-experience improvements</li>
+                    <li>Managed code reviews, enforcing <strong>SOLID principles</strong> and engineering standards across teams</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <span class="job-title">Sr. Software Engineer</span>
+                    <span class="job-date">Jun 2021 – Apr 2023</span>
+                </div>
+                <div class="job-company">Techment, Indore, India</div>
+                <ul class="bullets">
+                    <li>Architected applications integrating <strong>BLE 6.0</strong> medical devices with secure communication protocols</li>
+                    <li>Optimized real-time data synchronization and device pairing workflows</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <span class="job-title">Mobile Technology Consultant</span>
+                    <span class="job-date">Jan 2020 – Jun 2021</span>
+                </div>
+                <div class="job-company">JStech Alliance, Indore, India</div>
+                <ul class="bullets">
+                    <li>Delivered <strong>15+ applications across 8+ countries</strong> with multi-language localization</li>
+                    <li>Integrated NVR/DVR camera SDKs with real-time video streaming for IoT surveillance</li>
+                    <li>Implemented testing strategies <strong>reducing bug reports by 40%</strong></li>
+                    <li>Integrated Google Maps, Firebase Analytics and multiple payment gateways</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <span class="job-title">Sr. Android Developer</span>
+                    <span class="job-date">Jul 2016 – Dec 2019</span>
+                </div>
+                <div class="job-company">Walkover &middot; Codiant &middot; Galaxy Web Links, Indore, India</div>
+                <ul class="bullets">
+                    <li>Led a development team delivering applications for subsidiary companies (MSG91, GIDDH, Space)</li>
+                    <li>Delivered <strong>8+ enterprise projects</strong> spanning marketplace, taxi aggregation and real-time communication platforms</li>
+                    <li>Built video/audio calling SDKs using <strong>WebRTC</strong>; delivered e-commerce, LMS and communication platforms</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Retail Projects -->
+        <div class="section">
+            <div class="section-title">Retail &amp; Commerce Projects</div>
+
+            <div class="project">
+                <div class="project-title">E-Commerce Marketplace | Multi-Vendor Retail Platform</div>
+                <div class="project-desc">Multi-vendor online marketplace with integrated payments and order management</div>
+                <ul class="project-bullets">
+                    <li>Architected a <strong>multi-vendor marketplace</strong> supporting independent seller catalogues, listings and order flows on a shared platform</li>
+                    <li>Integrated <strong>multiple payment gateways</strong> with secure transaction handling and order-state reconciliation</li>
+                    <li>Designed the <strong>REST API integration layer</strong> between client and backend commerce services</li>
+                    <li>Implemented catalogue, cart and checkout journeys optimized for low-bandwidth networks</li>
+                </ul>
+                <div class="tech-stack">Android &middot; REST APIs &middot; Payment Gateway SDKs &middot; Firebase &middot; SQLite</div>
+                <div class="tech-stack">Domain: eCommerce platforms &middot; omnichannel commerce &middot; order management</div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">Taxi Aggregation Platform | Real-Time Marketplace &amp; Dispatch</div>
+                <div class="project-desc">GPS-enabled ride-hailing platform with live tracking and driver–rider matching</div>
+                <ul class="project-bullets">
+                    <li>Built a <strong>two-sided marketplace</strong> with real-time dispatch and supply–demand matching</li>
+                    <li>Implemented <strong>GPS tracking and live location streaming</strong> for in-flight order visibility</li>
+                    <li>Integrated payment processing and fare computation with trip lifecycle state management</li>
+                </ul>
+                <div class="tech-stack">Android &middot; GPS/Location &middot; Real-Time Messaging &middot; Payment Integration &middot; Google Maps SDK</div>
+                <div class="tech-stack">Domain: real-time supply matching &middot; fulfilment &middot; logistics visibility</div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">Risco Group NVR/DVR Surveillance Platform | Store &amp; Site Operations</div>
+                <div class="project-desc">Real-time video surveillance with cloud integration for multi-site monitoring</div>
+                <ul class="project-bullets">
+                    <li>Integrated <strong>NVR and DVR camera SDKs</strong> for live and recorded streaming across distributed sites</li>
+                    <li>Implemented real-time streaming with cloud connectivity for remote multi-site monitoring</li>
+                </ul>
+                <div class="tech-stack">Android &middot; NVR/DVR SDKs &middot; Real-Time Video Streaming &middot; Cloud Integration &middot; IoT</div>
+                <div class="tech-stack">Domain: store operations &middot; loss prevention &middot; multi-site estate monitoring</div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">LMS Platform (Intellizy) &amp; Chat Platform (Bizztalk)</div>
+                <div class="project-desc">Content delivery at scale, and real-time customer communication</div>
+                <ul class="project-bullets">
+                    <li>Built HTML/video content delivery with streaming playback and a <strong>personalized push notification system</strong> driving re-engagement</li>
+                    <li>Delivered a WhatsApp-comparable messaging platform with <strong>WebRTC</strong> audio/video calling, presence and cross-device sync</li>
+                </ul>
+                <div class="tech-stack">Android &middot; Video Streaming &middot; Push Notifications &middot; WebRTC &middot; Firebase &middot; REST APIs</div>
+                <div class="tech-stack">Domain: customer engagement &middot; personalized campaigns &middot; loyalty communications</div>
+            </div>
+        </div>
+
+        <!-- Architecture Projects -->
+        <div class="section">
+            <div class="section-title">Architecture &amp; Platform Projects</div>
+
+            <div class="project">
+                <div class="project-title">Techment Hackathon CodeCompass<span class="badge">2nd Prize Winner</span></div>
+                <div class="project-desc">AI tooling platform built on the Model Context Protocol (MCP) client–server architecture</div>
+                <ul class="project-bullets">
+                    <li>Designed a <strong>host-agnostic MCP server</strong> exposing custom tools and resources over a single contract</li>
+                    <li>Achieved <strong>cross-host compatibility</strong> — consumed by <strong>Claude Desktop, Cursor and Grok</strong> with no client-specific code</li>
+                    <li>Architected the <strong>client–server contract</strong>: tool schemas, capability negotiation, request/response handling, transport layer</li>
+                    <li>Presented to judges, earning <strong>2nd Prize</strong> among competing teams</li>
+                </ul>
+                <div class="tech-stack">MCP Client/Server &middot; LLM Tool Use &middot; AI Agent Architecture</div>
+                <div class="tech-stack"><a href="https://github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass">github.com/MsTechmentTechnology/Techment-Hackathon-Codecampass</a></div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">BenchPrep Learning Platform | Techment</div>
+                <div class="project-desc">Standardized test preparation and continuing education platform</div>
+                <ul class="project-bullets">
+                    <li>Spearheaded migration from legacy Android to <strong>Jetpack Compose</strong> with successful client delivery</li>
+                    <li>Architected <strong>Kotlin Multiplatform (KMP)</strong> transition for a unified iOS/Android codebase</li>
+                    <li>Modernized a legacy <strong>Java REST API</strong> codebase with the Material 3 design system</li>
+                </ul>
+                <div class="tech-stack">Jetpack Compose &middot; KMP &middot; Kotlin &middot; Java &middot; REST APIs &middot; Multi-flavor Architecture</div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">WellDoc BlueStar | Digital Health Platform</div>
+                <div class="project-desc">Mobile health solution for chronic disease management</div>
+                <ul class="project-bullets">
+                    <li>Developed <strong>BLE 6.0</strong> integration for secure medical device communication (glucometer, health monitors)</li>
+                    <li>Architected a <strong>multi-flavor application</strong> serving different healthcare client domains from one codebase</li>
+                    <li>Implemented <strong>HIPAA-compliant</strong> data handling and real-time patient data synchronization</li>
+                </ul>
+                <div class="tech-stack">Kotlin &middot; Jetpack Compose &middot; BLE &middot; Firebase &middot; SQLite</div>
+            </div>
+
+            <div class="project">
+                <div class="project-title">Meeting Maker &amp; ESP Buttons Control System</div>
+                <div class="project-desc">AI meeting intelligence, and serverless IoT device control</div>
+                <ul class="project-bullets">
+                    <li>Built a full-stack application with a <strong>Python/FastAPI backend</strong> and <strong>LLM processing</strong> for automated meeting analysis</li>
+                    <li>Architected an <strong>MQTT-based</strong> distributed device control system with binary, delay and interval switching modes</li>
+                </ul>
+                <div class="tech-stack">Python/FastAPI &middot; LLM APIs &middot; Ktor &middot; MQTT (paho) &middot; Hilt DI &middot; MVVM</div>
+            </div>
+        </div>
+
+        <!-- Education -->
+        <div class="section">
+            <div class="section-title">Education</div>
+            <div class="edu-item">
+                <span class="edu-degree">Master of Computer Applications (MCA)</span> | Manipal University, Jaipur | Nov 2025
+            </div>
+            <div class="edu-item">
+                <span class="edu-degree">Master of Science in Bioinformatics</span> | DAVV University, Indore | Oct 2011
+            </div>
+            <div class="edu-item">
+                <span class="edu-degree">Bachelor of Science in Bioinformatics</span> | DAVV University, Indore | Oct 2008
+            </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="section">
+            <div class="section-title">Certifications</div>
+            <div class="cert-item"><strong>Claude Certified Architect – Foundations</strong> | Anthropic | In Progress</div>
+            <div class="cert-item"><strong>Advanced AI and Machine Learning Techniques</strong> | Microsoft | Jul 2025</div>
+            <div class="cert-item"><strong>Machine Learning Capstone</strong> | IBM | Jul 2025</div>
+            <div class="cert-item"><strong>Research Methodologies</strong> | Queen Mary University of London | Jul 2025</div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="section">
+            <div class="section-title">Key Achievements</div>
+            <div class="achievement-group">
+                <div class="achievement-title">Architecture &amp; Cloud</div>
+                <ul class="achievement-list">
+                    <li>Architected <strong>RAG pipelines</strong> and LLM integrations for enterprise document processing and semantic search</li>
+                    <li>Evaluated and recommended optimal LLM selection for client use cases on cost, latency and capability</li>
+                    <li>Designed end-to-end solution architectures spanning mobile, cloud and IoT surfaces</li>
+                </ul>
+            </div>
+            <div class="achievement-group">
+                <div class="achievement-title">Engineering &amp; Delivery</div>
+                <ul class="achievement-list">
+                    <li>Won <strong>2nd Prize</strong> at Techment Hackathon for an <strong>MCP-based AI tooling platform</strong></li>
+                    <li>Delivered <strong>15+ production applications across 8+ countries</strong> with multi-language support</li>
+                    <li>Reduced bug reports by <strong>40%</strong> through comprehensive automated testing</li>
+                    <li>Led development teams and mentored engineers on architecture and AI-assisted development practices</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-note">References available upon request</div>
+    </div>
+</body>
+
+</html>
